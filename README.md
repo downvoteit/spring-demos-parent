@@ -21,7 +21,7 @@
  
 - Windows configuration
 
-```cmd
+```
 # Set a variable
 setx SONAR_SPRING_DEMOS_TOKEN "<token>"
 
