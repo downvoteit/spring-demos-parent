@@ -22,15 +22,15 @@
 - Windows configuration
 
 ```cmd
-# Set
+# Set a variable
 setx SONAR_SPRING_DEMOS_TOKEN "<token>"
 
-# View
+# View a variable
 reg query HKEY_CURRENT_USER\Environment
 
-# Unset
+# Unset a variable
 reg delete HKEY_CURRENT_USER\Environment /v SONAR_SPRING_DEMOS_TOKEN /f
 
-# Check
+# Check a variable
 mvn clean install verify
 ```
