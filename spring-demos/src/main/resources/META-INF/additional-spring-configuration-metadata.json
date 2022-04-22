@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "topics.name",
+      "type": "java.lang.String",
+      "description": "Description for topics.name."
+    },
+    {
+      "name": "queues.name",
+      "type": "java.lang.String",
+      "description": "Description for queues.name."
+    }
+  ]
+}

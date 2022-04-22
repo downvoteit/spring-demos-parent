@@ -1,0 +1,35 @@
+version: '3.8'
+
+networks:
+  spring_demos:
+    name: spring_demos_sonarqube
+    driver: bridge
+
+services:
+  db:
+    container_name: spring_demos_sonarqube_pg
+    hostname: db
+    image: postgres:14.2
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar
+      POSTGRES_DB: sonar
+    networks:
+      - spring_demos
+  web:
+    container_name: spring_demos_sonarqube_web
+    image: sonarqube:lts-community
+    restart: unless-stopped
+    ports:
+      - 19000:9000
+      - 19092:9092
+    environment:
+      TZ: Asia/Tashkent
+      ES_JAVA_HOME: /opt/java/openjdk
+    volumes:
+      - ./sonar.properties:/opt/sonarqube/conf/sonar.properties
+    networks:
+      - spring_demos
+    depends_on:
+      - db

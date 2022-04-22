@@ -1,0 +1,19 @@
+version: '3.8'
+
+networks:
+  spring_demos:
+    name: spring_demos_hibernate
+    driver: bridge
+
+services:
+  db:
+    container_name: spring_demos_hibernate_pg
+    hostname: db
+    image: postgres:14.2
+    restart: unless-stopped
+    ports:
+      - 7001:5432
+    environment:
+      POSTGRES_PASSWORD: spring_demos_hibernate_pg
+    networks:
+      - spring_demos
