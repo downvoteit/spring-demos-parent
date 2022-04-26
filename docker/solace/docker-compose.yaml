@@ -4,6 +4,16 @@ networks:
   spring_demos:
     name: spring_demos_solace
 
+volumes:
+  solace_primary:
+    name: spring_demos_solace_primary
+  solace_backup:
+    name: spring_demos_solace_backup
+  solace_monitoring:
+    name: spring_demos_solace_monitoring
+  haproxy:
+    name: spring_demos_solace_haproxy
+
 x-environment:
   &default-environment
   username_admin_globalaccesslevel: admin
@@ -45,6 +55,8 @@ services:
       redundancy_activestandbyrole: primary
       service_semp_tlsport: 1943
     <<: *default-common
+    volumes:
+      - solace_primary:/var/lib/solace
 
   backup:
     container_name: spring_demos_solace_backup
@@ -60,6 +72,8 @@ services:
       redundancy_activestandbyrole: backup
       service_semp_tlsport: 1943
     <<: *default-common
+    volumes:
+      - solace_backup:/var/lib/solace
 
   monitoring:
     container_name: spring_demos_solace_monitoring
@@ -73,16 +87,19 @@ services:
       nodetype: monitoring
       service_semp_tlsport: 1943
     <<: *default-common
+    volumes:
+      - solace_monitoring:/var/lib/solace
 
   lb:
     container_name: spring_demos_solace_lb
     restart: unless-stopped
     image: haproxy:2.3
-    volumes:
-      - ./assertMaster.perl:/assertMaster.perl
     environment:
       ADMIN_USERNAME: admin
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+    volumes:
+      - ./assertMaster.perl:/assertMaster.perl
+      - haproxy:/usr/local/etc/haproxy
     entrypoint:
       - /bin/bash
       - -c

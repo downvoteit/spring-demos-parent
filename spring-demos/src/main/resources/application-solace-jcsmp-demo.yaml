@@ -13,6 +13,3 @@ solace:
     msg-vpn: default
     client-username: default
     client-password: default
-
-topics:
-  name: jcsmp/topic

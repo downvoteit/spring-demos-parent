@@ -5,6 +5,12 @@ networks:
     name: spring_demos_hibernate
     driver: bridge
 
+volumes:
+  pg:
+    name: spring_demos_hibernate_pg
+  pg_data:
+    name: spring_demos_hibernate_pg_data
+
 services:
   db:
     container_name: spring_demos_hibernate_pg
@@ -15,5 +21,8 @@ services:
       - 7001:5432
     environment:
       POSTGRES_PASSWORD: spring_demos_hibernate_pg
+    volumes:
+      - pg:/var/lib/postgresql
+      - pg_data:/var/lib/postgresql/data
     networks:
       - spring_demos
