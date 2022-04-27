@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
+/** The type Item. */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

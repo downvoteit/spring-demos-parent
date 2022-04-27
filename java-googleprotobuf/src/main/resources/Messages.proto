@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package com.downvoteit.springdemos.googleprotobufdemo;
+package com.downvoteit.javagoogleprotobuf;
 
 option java_multiple_files = true;
-option java_package = "com.downvoteit.springdemos.googleprotobufdemo";
+option java_package = "com.downvoteit.javagoogleprotobuf";
 
 message Request {
   int32 id = 1;

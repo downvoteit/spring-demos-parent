@@ -1,9 +1,9 @@
 package com.downvoteit.springdemos.solacedemo.guaranteed;
 
-import com.downvoteit.springdemos.googleprotobufdemo.Request;
+import com.downvoteit.javagoogleprotobuf.Request;
 import com.solacesystems.jcsmp.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +12,11 @@ import javax.annotation.PreDestroy;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
+/** The type Guaranteed producer service. */
 @Slf4j
 @Component
-public class GuaranteedProducer {
+@Profile("solace")
+public class GuaranteedProducerService {
   private final String queueName;
   private final JCSMPSession session;
 
@@ -55,21 +57,39 @@ public class GuaranteedProducer {
         }
       };
 
-  public GuaranteedProducer(String queueName, @Qualifier("producerSession") JCSMPSession session) {
+  /**
+   * Instantiates a new Guaranteed producer service.
+   *
+   * @param queueName the queue name
+   * @param session the session
+   */
+  public GuaranteedProducerService(String queueName, JCSMPSession session) {
     this.queueName = queueName;
     this.session = session;
   }
 
+  /**
+   * Connect session.
+   *
+   * @throws JCSMPException the jcsmp exception
+   */
   @PostConstruct
   public void connectSession() throws JCSMPException {
     session.connect();
   }
 
+  /** Destroy session. */
   @PreDestroy
   public void destroySession() {
     if (!session.isClosed()) session.closeSession();
   }
 
+  /**
+   * Send.
+   *
+   * @throws JCSMPException the jcsmp exception
+   * @throws NoSuchAlgorithmException the no such algorithm exception
+   */
   @Scheduled(fixedDelay = 5000)
   public void send() throws JCSMPException, NoSuchAlgorithmException {
     var producer = session.getMessageProducer(newHandler);

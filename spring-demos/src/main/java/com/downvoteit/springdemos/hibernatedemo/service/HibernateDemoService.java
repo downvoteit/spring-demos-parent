@@ -13,19 +13,31 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.stream.LongStream;
 
+/** The type Hibernate demo service. */
 @Slf4j
 @Service
-@Profile({"hibernate-pg-demo", "hibernate-h2-demo"})
+@Profile({"hibernate-pg", "hibernate-h2"})
 public class HibernateDemoService {
   private final EntityManagerFactory entityManagerFactory;
 
   @Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
   private Integer batchSize;
 
+  /**
+   * Instantiates a new Hibernate demo service.
+   *
+   * @param entityManagerFactory the entity manager factory
+   */
   public HibernateDemoService(EntityManagerFactory entityManagerFactory) {
     this.entityManagerFactory = entityManagerFactory;
   }
 
+  /**
+   * Batch save items boolean.
+   *
+   * @return the boolean
+   * @throws NoSuchAlgorithmException the no such algorithm exception
+   */
   public boolean batchSaveItems() throws NoSuchAlgorithmException {
     var entityManager = entityManagerFactory.createEntityManager();
     var entityTransaction = entityManager.getTransaction();
@@ -62,6 +74,11 @@ public class HibernateDemoService {
     return true;
   }
 
+  /**
+   * Joined table save other items boolean.
+   *
+   * @return the boolean
+   */
   public boolean joinedTableSaveOtherItems() {
     var entityManager = entityManagerFactory.createEntityManager();
     var entityTransaction = entityManager.getTransaction();
@@ -81,6 +98,11 @@ public class HibernateDemoService {
     return true;
   }
 
+  /**
+   * Slow query get items int.
+   *
+   * @return the int
+   */
   public int slowQueryGetItems() {
     var entityManager = entityManagerFactory.createEntityManager();
     var entityTransaction = entityManager.getTransaction();

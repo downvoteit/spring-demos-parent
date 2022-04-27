@@ -2,12 +2,12 @@ spring:
   main:
     banner-mode: off
   autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.solr.SolrAutoConfiguration, org.springframework.boot.autoconfigure.task.TaskSchedulingAutoConfiguration
+    exclude: org.springframework.boot.autoconfigure.solr.SolrAutoConfiguration
   datasource:
-    url: jdbc:postgresql://localhost:7001/postgres
-    username: postgres
-    password: spring_demos_hibernate_pg
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
     hikari:
       connection-test-query: select 1
       auto-commit: false
@@ -17,12 +17,12 @@ spring:
     generate-ddl: true
     open-in-view: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyComponentPathImpl
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    database: postgresql
+    database-platform: org.hibernate.dialect.H2Dialect
+    database: h2
     properties:
       hibernate:
         format_sql: true
@@ -32,14 +32,11 @@ spring:
         session:
           events.log.LOG_QUERIES_SLOWER_THAN_MS: 10
   flyway:
-    enabled: true
-    locations: classpath:db/versions
-    url: jdbc:postgresql://localhost:7001/postgres
-    user: postgres
-    password: spring_demos_hibernate_pg
-    schemas: postgres
+    enabled: false
+
 server:
-  port: 7002
+  port: 7003
+
 logging:
   level.org.hibernate.SQL: INFO
   level.org.hibernate.SQL_SLOW: TRACE

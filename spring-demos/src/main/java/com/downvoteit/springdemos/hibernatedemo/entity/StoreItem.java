@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+/** The type Store item. */
 @Getter
 @Setter
 @AllArgsConstructor

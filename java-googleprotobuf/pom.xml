@@ -5,9 +5,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.downvoteit</groupId>
-  <artifactId>spring-demos-googleprotobuf</artifactId>
+  <artifactId>java-googleprotobuf</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>spring-demos-googleprotobuf</name>
+  <name>java-googleprotobuf</name>
   <description>GBP generated schema project</description>
   <packaging>jar</packaging>
 
@@ -38,7 +38,7 @@
         <version>${protobuf.maven.version}</version>
         <configuration>
           <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
-          <protoSourceRoot>${basedir}/src/main/resources/proto</protoSourceRoot>
+          <protoSourceRoot>${basedir}/src/main/resources</protoSourceRoot>
         </configuration>
         <executions>
           <execution>
