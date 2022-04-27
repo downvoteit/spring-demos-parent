@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 networks:
   spring_demos:
@@ -27,9 +27,17 @@ services:
       POSTGRES_USER: sonar
       POSTGRES_PASSWORD: sonar
       POSTGRES_DB: sonar
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     volumes:
       - pg:/var/lib/postgresql
       - pg_data:/var/lib/postgresql/data
+      - ./changePassword.sh:/changePassword.sh
+    healthcheck:
+      test: ["CMD-SHELL", "bash /changePassword.sh"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     networks:
       - spring_demos
   web:

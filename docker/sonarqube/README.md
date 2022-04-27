@@ -29,18 +29,18 @@ sysctl vm.max_map_count
 
 ```bash
 # Start
-docker-compose up -d
+docker-compose --env-file ./env.dev up -d
 
 # Monitor
-docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}"
 # or
-docker-compose ps
+docker-compose --env-file ./env.dev ps
 
 # Logs
-docker-compose logs -f
+docker-compose --env-file ./env.dev logs -f
 
 # Stop
-docker-compose down
+docker-compose --env-file ./env.dev down
 ```
 
 - If logs contain or end with `SonarQube is up` then everything is working as intended
