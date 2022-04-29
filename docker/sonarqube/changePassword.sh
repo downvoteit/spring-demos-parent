@@ -2,9 +2,8 @@
 
 \set ON_ERROR_STOP true
 
-if [[ $(pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB") != *"accepting connections"* ]]
-then
-  exit 1;
+if [[ $(pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB") != *"accepting connections"* ]]; then
+  exit 1
 fi
 
 psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -w <<EOF
