@@ -5,10 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Item {
+public class ItemMessage {
   private Integer id;
-  private Integer categoryId;
-  private String name;
-  private Integer amount;
-  private Double price;
+  private String message;
 }

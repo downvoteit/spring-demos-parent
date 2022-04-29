@@ -1,12 +1,12 @@
 package com.downvoteit.springwebflux.controller;
 
 import com.downvoteit.springwebflux.dto.Item;
+import com.downvoteit.springwebflux.dto.ItemMessage;
 import com.downvoteit.springwebflux.service.ItemService;
+import com.solacesystems.jcsmp.JCSMPException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -29,7 +29,21 @@ public class ItemController {
   }
 
   @GetMapping("/all")
-  public Flux<Item> createItem() {
+  public Flux<Item> getItems() {
     return Flux.fromStream(itemService.getItems());
+  }
+
+  @PostMapping
+  public Mono<ItemMessage> createItem(@RequestBody Item item) {
+    return Mono.defer(
+        () -> {
+          try {
+            var itemMessage = itemService.createItem(item);
+
+            return Mono.just(itemMessage);
+          } catch (JCSMPException e) {
+            return Mono.error(e);
+          }
+        });
   }
 }
