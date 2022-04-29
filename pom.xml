@@ -48,6 +48,8 @@
     <module>spring-solace-common</module>
     <module>spring-solace-producer</module>
     <module>spring-solace-consumer</module>
+    <module>spring-xml</module>
+    <module>spring-beanlifecycle</module>
   </modules>
 
   <dependencyManagement>
@@ -78,6 +80,12 @@
         <artifactId>reactor-test</artifactId>
         <version>${project.reactor.version}</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-configuration-processor</artifactId>
+        <version>${spring.boot.version}</version>
+        <optional>true</optional>
       </dependency>
 
       <dependency>

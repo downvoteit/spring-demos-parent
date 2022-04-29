@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <!-- Constructor injection (Service) -->
+  <bean id="service"
+        class="com.downvoteit.springxml.service.Service">
+    <constructor-arg name="repositoryOne" ref="repositoryOne"/>
+    <constructor-arg name="repositoryTwo" ref="repositoryTwo"/>
+    <constructor-arg name="repositoryThree" ref="repositoryThree"/>
+    <constructor-arg name="repositoryFour" ref="repositoryFour"/>
+  </bean>
+
+  <!-- Constructor injection & List (ListService) -->
+  <bean id="listService"
+        class="com.downvoteit.springxml.service.ListService">
+    <constructor-arg name="repositories">
+      <list value-type="java.util.List">
+        <ref bean="repositoryOne"/>
+        <ref bean="repositoryTwo"/>
+        <ref bean="repositoryThree"/>
+        <ref bean="repositoryFour"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <!-- Constructor injection (Repository) -->
+  <bean id="repositoryOne"
+        class="com.downvoteit.springxml.repository.Repository">
+    <constructor-arg name="id" value="1"/>
+    <constructor-arg name="name" value="one"/>
+  </bean>
+
+  <!-- Setter injection (Repository) -->
+  <bean id="repositoryTwo"
+        class="com.downvoteit.springxml.repository.Repository">
+    <property name="id" value="2"/>
+    <property name="name" value="two"/>
+  </bean>
+
+  <!-- Static factory injection (Repository) -->
+  <bean id="repositoryThree"
+        class="com.downvoteit.springxml.factory.RepositoryStaticFactory"
+        factory-method="getInstance">
+    <constructor-arg name="id" value="3"/>
+    <constructor-arg name="name" value="three"/>
+  </bean>
+
+  <!-- Instance factory injection (Repository) -->
+  <bean id="repositoryFourInstanceFactory"
+        class="com.downvoteit.springxml.factory.RepositoryInstanceFactory"/>
+  <bean id="repositoryFour"
+        class="com.downvoteit.springxml.factory.RepositoryInstanceFactory"
+        factory-method="getInstance"
+        factory-bean="repositoryFourInstanceFactory">
+    <constructor-arg name="id" value="4"/>
+    <constructor-arg name="name" value="four"/>
+  </bean>
+
+</beans>

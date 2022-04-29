@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "credentials.username",
+      "type": "java.lang.String",
+      "description": "Description for credentials.username."
+    },
+    {
+      "name": "credentials.password",
+      "type": "java.lang.String",
+      "description": "Description for credentials.password."
+    }
+  ]
+}
