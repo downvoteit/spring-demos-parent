@@ -1,0 +1,13 @@
+spring:
+  main:
+    banner-mode: off
+
+server:
+  port: 7005
+
+solace:
+  java:
+    host: tcp://localhost:55555
+    msg-vpn: default
+    client-username: default
+    client-password: default

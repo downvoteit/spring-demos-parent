@@ -1,6 +1,6 @@
 package com.downvoteit.springsolaceproducer.service;
 
-import com.downvoteit.springgpb.Request;
+import com.downvoteit.springgpb.ItemRequest;
 import com.solacesystems.jcsmp.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -82,10 +82,16 @@ public class GuaranteedProducerService {
 
       // Use of GPB
       var data =
-          Request.newBuilder().setId(random.nextInt(10)).setAmount(random.nextInt(100)).build();
+          ItemRequest.newBuilder()
+              .setId(random.nextInt(10))
+              .setCategoryId(random.nextInt(100))
+              .setName("New item")
+              .setAmount(random.nextInt(10000))
+              .setPrice(random.nextInt(10) * 10_000 * random.nextDouble())
+              .build();
       bytesMessage.setData(data.toByteArray());
 
-      log.info("Producer sent: {}", data.getId());
+      log.info("Producer sent: \n{}", data);
 
       producer.send(bytesMessage, queue);
     } else {

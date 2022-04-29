@@ -1,6 +1,6 @@
 package com.downvoteit.solaceconsumer.service;
 
-import com.downvoteit.springgpb.Request;
+import com.downvoteit.springgpb.ItemRequest;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.solacesystems.jcsmp.*;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class GuaranteedConsumerService {
             var bytes = ((BytesMessage) message).getData();
 
             try {
-              var data = Request.parseFrom(bytes);
+              var data = ItemRequest.parseFrom(bytes);
 
               log.info("Consumer ByteMessage received: \n{}", data);
             } catch (InvalidProtocolBufferException e) {

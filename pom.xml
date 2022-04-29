@@ -50,6 +50,7 @@
     <module>spring-solace-consumer</module>
     <module>spring-xml</module>
     <module>spring-beanlifecycle</module>
+    <module>spring-webflux</module>
   </modules>
 
   <dependencyManagement>
