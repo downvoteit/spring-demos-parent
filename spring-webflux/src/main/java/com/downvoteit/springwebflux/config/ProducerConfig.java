@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 @Configuration
-public class GuaranteedConfig {
+public class ProducerConfig {
   private final JCSMPProperties properties;
 
-  public GuaranteedConfig(JCSMPProperties properties) {
+  public ProducerConfig(JCSMPProperties properties) {
     this.properties = properties;
   }
 
