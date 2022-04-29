@@ -184,6 +184,7 @@
         <plugin>
           <groupId>org.flywaydb</groupId>
           <artifactId>flyway-maven-plugin</artifactId>
+          <version>${flyway.version}</version>
         </plugin>
         <plugin>
           <groupId>org.xolstice.maven.plugins</groupId>
