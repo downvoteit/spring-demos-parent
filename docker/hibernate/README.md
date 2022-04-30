@@ -1,4 +1,4 @@
-# spring-demos-hibernate
+# hibernate
 
 ## Commands
 

@@ -1,4 +1,4 @@
-# spring-demos-sonarqube
+# sonarqube
 
 ## Increase max virtual memory areas for Elasticsearch on Docker Desktop (WSL2)
 
