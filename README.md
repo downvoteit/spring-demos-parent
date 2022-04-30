@@ -37,19 +37,42 @@ reg delete HKEY_CURRENT_USER\Environment /v SPRING_DEMOS_SONAR_TOKEN /f
 mvn clean install
 ```
 
-## Schema
+## Possible schema
+
+### Ledger
+
+- Server 7002 Angular
+- Server 7003 WebFlux + WebClient
+- Server 7004 WebFlux + Solace
+- Server 7005 WebFlux + Solace
+- Server 7006 Redis
+- Server 7007 PostgreSQL 
+
+### Analytics
+
+- Server 8002 Angular
+- Server 8003 WebFlux + Solace
+- Server 8004 PostgreSQL
+
 ```
-                   Server 7003 WebFlux + WebClient
-                                  |
-                Server 7004 WebFlux + Solace Producer
-                                  |
-                  ----------------------------------
-                  |                                |
-             Server 7005                       Server 7006
-       WebFlux + Solace Consumer        WebFlux + Solace Consumer
-                  |                                |
-       -----------------------                Server 7016
-       |                     |                PostgresSQL
-   Server 7015           Server 7025           
-     Redis               PostgresSQL  
+               Server 7002 
+                 Angular
+                    |
+               Server 7003 
+             WebFlux + WebClient
+                    |
+               Server 7004                                  Server 8002 
+             WebFlux + Solace                                 Angular
+                    |                                            |
+                    ----------------------------------------------
+                    |                                            |
+               Server 7005                                   Server 8003
+             WebFlux + Solace                              WebFlux + Solace 
+                    |                                            |
+         -----------------------                            Server 8004
+         |                     |                             PostgreSQL
+    Server 7006            Server 7007                       
+       Redis                PostgreSQL  
 ```
+
+

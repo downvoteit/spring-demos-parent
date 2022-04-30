@@ -54,18 +54,6 @@
     <module>spring-common</module>
   </modules>
 
-  <developers>
-    <developer>
-      <id>main</id>
-      <name>downvoteit</name>
-    </developer>
-  </developers>
-
-  <scm>
-    <url>https://github.com/downvoteit/spring-demos-parent</url>
-    <connection>scm:git@github.com:downvoteit/spring-demos-parent.git</connection>
-  </scm>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
