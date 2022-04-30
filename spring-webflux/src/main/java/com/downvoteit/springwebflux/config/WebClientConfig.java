@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebClientConfig {
-  @Value("${baseUrl:http://localhost:7004}")
+  @Value("${webclient.baseUrl:http://localhost:7004}")
   private String baseUrl;
 
   @Bean
