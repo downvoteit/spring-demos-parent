@@ -1,4 +1,4 @@
-package com.downvoteit.springsolacecommon.handlers;
+package com.downvoteit.springsolacecommon.handler;
 
 import com.solacesystems.jcsmp.JCSMPException;
 import com.solacesystems.jcsmp.JCSMPStreamingPublishCorrelatingEventHandler;

@@ -1,6 +1,6 @@
 package com.downvoteit.solaceconsumer.config;
 
-import com.downvoteit.springsolacecommon.listeners.ConsumerListener;
+import com.downvoteit.springsolacecommon.listener.ConsumerListener;
 import com.solacesystems.jcsmp.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

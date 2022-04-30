@@ -1,4 +1,4 @@
-package com.downvoteit.springsolacecommon.listeners;
+package com.downvoteit.springsolacecommon.listener;
 
 import com.downvoteit.springgpb.ItemRequest;
 import com.google.protobuf.InvalidProtocolBufferException;
