@@ -62,17 +62,17 @@ mvn clean install
             WebFlux + WebClient
                     |
                Server 7004                                  Server 8002 
-             WebFlux + Solace                                 Angular
+            WebFlux + Solace                                  Angular
                     |                                            |
                     ----------------------------------------------
                     |                                            |
-               Server 7005                                   Server 8003
-            WebFlux + Solace                             WebFlux + Solace 
+               Server 7005                                  Server 8003
+            WebFlux + Solace                              WebFlux + Solace 
                     |                                            |
          -----------------------                            Server 8004
          |                     |                             PostgreSQL
-    Server 7006            Server 7007                       
-       Redis                PostgreSQL  
+    Server 7006           Server 7007                       
+       Redis               PostgreSQL  
 ```
 
 
