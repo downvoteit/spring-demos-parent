@@ -34,5 +34,5 @@ reg delete HKEY_CURRENT_USER\Environment /v SPRING_DEMOS_SONAR_URL /f
 reg delete HKEY_CURRENT_USER\Environment /v SPRING_DEMOS_SONAR_TOKEN /f
 
 # Check a variable
-mvn clean install verify
+mvn clean install
 ```
