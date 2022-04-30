@@ -1,7 +1,7 @@
 package com.downvoteit.springwebflux.controller;
 
-import com.downvoteit.springwebflux.dto.Item;
-import com.downvoteit.springwebflux.dto.ItemMessage;
+import com.downvoteit.springsolacecommon.dto.ItemRequestDto;
+import com.downvoteit.springsolacecommon.dto.ItemResponseDto;
 import com.downvoteit.springwebflux.service.ItemService;
 import com.solacesystems.jcsmp.JCSMPException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,21 +24,21 @@ public class ItemController {
   }
 
   @GetMapping
-  public Mono<Item> getItem() {
+  public Mono<ItemRequestDto> getItem() {
     return Mono.fromCallable(itemService::getItem);
   }
 
   @GetMapping("/all")
-  public Flux<Item> getItems() {
+  public Flux<ItemRequestDto> getItems() {
     return Flux.fromStream(itemService.getItems());
   }
 
   @PostMapping
-  public Mono<ItemMessage> createItem(@RequestBody Item item) {
+  public Mono<ItemResponseDto> createItem(@RequestBody ItemRequestDto itemRequestDto) {
     return Mono.defer(
         () -> {
           try {
-            var itemMessage = itemService.createItem(item);
+            var itemMessage = itemService.createItem(itemRequestDto);
 
             return Mono.just(itemMessage);
           } catch (JCSMPException e) {

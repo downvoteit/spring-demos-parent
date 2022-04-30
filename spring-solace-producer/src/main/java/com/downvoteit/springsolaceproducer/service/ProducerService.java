@@ -1,4 +1,4 @@
-package com.downvoteit.springwebflux.service;
+package com.downvoteit.springsolaceproducer.service;
 
 import com.downvoteit.springgpb.ItemRequest;
 import com.downvoteit.springsolacecommon.dto.ItemRequestDto;

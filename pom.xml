@@ -36,8 +36,8 @@
     <os.maven.version>1.7.0</os.maven.version>
     <sonar.maven.version>3.9.1.2184</sonar.maven.version>
     <jacoco.maven.version>0.8.8</jacoco.maven.version>
-    <sonar.host.url>http://localhost:19000</sonar.host.url>
-    <sonar.login>${env.SONAR_SPRING_DEMOS_TOKEN}</sonar.login>
+    <sonar.host.url>${env.SPRING_DEMOS_SONAR_URL}</sonar.host.url>
+    <sonar.login>${env.SPRING_DEMOS_SONAR_TOKEN}</sonar.login>
     <sonar.language>java</sonar.language>
     <sonar.exclusions>.idea/**,.mvn/**,docker/**</sonar.exclusions>
   </properties>

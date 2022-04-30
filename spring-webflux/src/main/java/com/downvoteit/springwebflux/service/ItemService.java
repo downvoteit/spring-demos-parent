@@ -1,7 +1,7 @@
 package com.downvoteit.springwebflux.service;
 
-import com.downvoteit.springwebflux.dto.Item;
-import com.downvoteit.springwebflux.dto.ItemMessage;
+import com.downvoteit.springsolacecommon.dto.ItemRequestDto;
+import com.downvoteit.springsolacecommon.dto.ItemResponseDto;
 import com.solacesystems.jcsmp.JCSMPException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,16 +25,16 @@ public class ItemService {
     }
   }
 
-  public Item getItem() {
+  public ItemRequestDto getItem() {
     return createRandomItem(null);
   }
 
-  public Stream<Item> getItems() {
+  public Stream<ItemRequestDto> getItems() {
     return Stream.iterate(1, o -> o <= 10, o -> o + 1).map(this::createRandomItem);
   }
 
-  private Item createRandomItem(Integer id) {
-    return Item.builder()
+  private ItemRequestDto createRandomItem(Integer id) {
+    return ItemRequestDto.builder()
         .id(id != null ? id : random.nextInt(10))
         .categoryId(random.nextInt(100))
         .name("New item")
@@ -43,7 +43,7 @@ public class ItemService {
         .build();
   }
 
-  public ItemMessage createItem(Item item) throws JCSMPException {
-    return ItemMessage.builder().id(producerService.send(item)).message("Created").build();
+  public ItemResponseDto createItem(ItemRequestDto itemRequestDto) throws JCSMPException {
+    return ItemResponseDto.builder().id(producerService.send(itemRequestDto)).message("Created").build();
   }
 }

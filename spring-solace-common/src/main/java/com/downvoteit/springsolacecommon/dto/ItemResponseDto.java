@@ -1,11 +1,11 @@
-package com.downvoteit.springwebflux.dto;
+package com.downvoteit.springsolacecommon.dto;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class ItemMessage {
+public class ItemResponseDto {
   private Integer id;
   private String message;
 }

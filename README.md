@@ -23,13 +23,15 @@
 
 ```
 # Set a variable
-setx SONAR_SPRING_DEMOS_TOKEN "<token>"
+setx SPRING_DEMOS_SONAR_URL <url>
+setx SPRING_DEMOS_SONAR_TOKEN <token>
 
 # View a variable
 reg query HKEY_CURRENT_USER\Environment
 
 # Unset a variable
-reg delete HKEY_CURRENT_USER\Environment /v SONAR_SPRING_DEMOS_TOKEN /f
+reg delete HKEY_CURRENT_USER\Environment /v SPRING_DEMOS_SONAR_URL /f
+reg delete HKEY_CURRENT_USER\Environment /v SPRING_DEMOS_SONAR_TOKEN /f
 
 # Check a variable
 mvn clean install verify
