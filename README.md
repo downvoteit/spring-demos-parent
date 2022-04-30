@@ -67,7 +67,7 @@ mvn clean install
                     ----------------------------------------------
                     |                                            |
                Server 7005                                   Server 8003
-             WebFlux + Solace                              WebFlux + Solace 
+            WebFlux + Solace                             WebFlux + Solace 
                     |                                            |
          -----------------------                            Server 8004
          |                     |                             PostgreSQL
