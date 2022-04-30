@@ -5,9 +5,7 @@
   <div>
     <label for="categoryId">Category</label>
     <select id="categoryId" formControlName="categoryId">
-      <option value="1">Primary</option>
-      <option value="2">Secondary</option>
-      <option value="3">Tertiary</option>
+      <option *ngFor="let item of categories; let i = index" [value]="(i + 1)">{{ item }}</option>
     </select>
   </div>
   <div>

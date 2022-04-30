@@ -17,6 +17,12 @@ interface ItemResponse {
   message: string;
 }
 
+export enum CategoriesEnum {
+  p = 'Primary',
+  s = 'Secondary',
+  t = 'Tertiary',
+}
+
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -25,6 +31,7 @@ interface ItemResponse {
 export class MainComponent implements OnInit, OnDestroy {
   url = 'http://localhost:7003/items/topic';
   subscriptions: Subscription[] = [];
+  categories: CategoriesEnum[] = Object.values(CategoriesEnum);
   default: ItemRequest = {id: 0, categoryId: 1, name: '', amount: 0, price: 0.0};
   validation = {
     name: {required: true, min: 3, max: 10},
