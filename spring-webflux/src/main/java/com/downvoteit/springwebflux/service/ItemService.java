@@ -2,9 +2,13 @@ package com.downvoteit.springwebflux.service;
 
 import com.downvoteit.springsolacecommon.dto.ItemRequestDto;
 import com.downvoteit.springsolacecommon.dto.ItemResponseDto;
-import com.solacesystems.jcsmp.JCSMPException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -13,11 +17,11 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class ItemService {
-  private final ProducerService producerService;
+  private final WebClient webClient;
   private SecureRandom random;
 
-  public ItemService(ProducerService producerService) {
-    this.producerService = producerService;
+  public ItemService(WebClient webClient) {
+    this.webClient = webClient;
     try {
       random = SecureRandom.getInstanceStrong();
     } catch (NoSuchAlgorithmException e) {
@@ -43,7 +47,14 @@ public class ItemService {
         .build();
   }
 
-  public ItemResponseDto createItem(ItemRequestDto itemRequestDto) throws JCSMPException {
-    return ItemResponseDto.builder().id(producerService.send(itemRequestDto)).message("Created").build();
+  public Mono<ItemResponseDto> createItem(String mode, ItemRequestDto itemRequestDto) {
+    return webClient
+        .post()
+        .uri("/items/{mode}", mode)
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+        .body(BodyInserters.fromValue(itemRequestDto))
+        .retrieve()
+        .bodyToMono(ItemResponseDto.class);
   }
 }

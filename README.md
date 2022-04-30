@@ -2,7 +2,7 @@
 
 ## Purpose
 
-- Experiment with Spring Boot, Hibernate, Solace, Google Protocol Buffers, JAXB and WebFlux
+- Experiment with various tech
 
 ## Learning resources
 

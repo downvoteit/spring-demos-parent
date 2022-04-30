@@ -3,7 +3,7 @@ spring:
     banner-mode: off
 
 server:
-  port: 7003
+  port: 7004
 
 solace:
   java:
@@ -11,8 +11,8 @@ solace:
     msg-vpn: default
     client-username: default
     client-password: default
-  jms:
-    host: smf://localhost:55555
-    msgVpn: default
-    clientUsername: default
-    clientPassword: default
+
+logging:
+  level:
+    root: INFO
+    com.solacesystems.jcsmp.*: ERROR
