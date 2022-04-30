@@ -39,7 +39,7 @@ mvn clean install
 
 ## Possible schema
 
-### Ledger
+### Primary
 
 - Server 7002 Angular
 - Server 7003 WebFlux + WebClient
@@ -48,7 +48,7 @@ mvn clean install
 - Server 7006 Redis
 - Server 7007 PostgreSQL 
 
-### Analytics
+### Secondary
 
 - Server 8002 Angular
 - Server 8003 WebFlux + Solace

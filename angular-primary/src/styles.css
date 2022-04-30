@@ -1,0 +1,45 @@
+/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 8px;
+  color: whitesmoke;
+  font-family: Arial, sans-serif;
+  background-color: rgb(45, 45, 45);
+}
+
+.plain-main {
+  width: 450px;
+  margin: 0 auto;
+  border: 1px solid whitesmoke;
+}
+
+.plain-main h1, h2, button, #response {
+  text-align: center;
+}
+
+.plain-main h2 {
+  text-decoration: underline;
+}
+
+.plain-main form {
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.plain-main label {
+  display: inline-block;
+  width: 100px;
+}
+
+.plain-main input, button, select {
+  padding: 5px;
+}
+
+.plain-main button {
+  width: 200px;
+  margin-left:25%;
+  margin-right:25%;
+}
+
+.plain-val-left {
+  text-align: right;
+}

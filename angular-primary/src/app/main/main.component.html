@@ -1,0 +1,47 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <h2>Create Item</h2>
+  </div>
+  <div>
+    <label for="categoryId">Category</label>
+    <select id="categoryId" formControlName="categoryId">
+      <option value="1">Primary</option>
+      <option value="2">Secondary</option>
+      <option value="3">Tertiary</option>
+    </select>
+  </div>
+  <div>
+    <label for="name">Name</label>
+    <input type="text"
+           id="name"
+           placeholder="Name"
+           formControlName="name"
+           [minLength]="validation.name.min"
+           [maxLength]="validation.name.max"
+           [required]="validation.name.required">
+  </div>
+  <div>
+    <label for="amount">Amount</label>
+    <input type="text"
+           id="amount"
+           class="plain-val-left"
+           placeholder="Amount"
+           formControlName="amount"
+           [minLength]="validation.amount.min"
+           [maxLength]="validation.amount.max"
+           [required]="validation.amount.required">
+  </div>
+  <div>
+    <label for="price">Price</label>
+    <input type="text"
+           id="price"
+           class="plain-val-left"
+           placeholder="Price"
+           formControlName="price"
+           [minLength]="validation.price.min"
+           [maxLength]="validation.price.max"
+           [required]="validation.price.required">
+  </div>
+  <button type="submit" [disabled]="form.invalid">Submit</button>
+  <div id="response" *ngIf="response">{{ response.message }}</div>
+</form>

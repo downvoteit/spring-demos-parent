@@ -45,8 +45,8 @@ services:
     image: sonarqube:lts-community
     restart: unless-stopped
     ports:
-      - 19000:9000
-      - 19092:9092
+      - 20001:9000
+      - 20002:9092
     environment:
       TZ: Asia/Tashkent
       ES_JAVA_HOME: /opt/java/openjdk

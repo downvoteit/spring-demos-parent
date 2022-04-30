@@ -39,7 +39,7 @@
     <sonar.host.url>${env.SPRING_DEMOS_SONAR_URL}</sonar.host.url>
     <sonar.login>${env.SPRING_DEMOS_SONAR_TOKEN}</sonar.login>
     <sonar.language>java</sonar.language>
-    <sonar.exclusions>.idea/**,.mvn/**,docker/**</sonar.exclusions>
+    <sonar.exclusions>.idea/**,.mvn/**,docker/**,angular-*/**</sonar.exclusions>
   </properties>
 
   <modules>
