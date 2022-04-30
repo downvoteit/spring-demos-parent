@@ -10,27 +10,13 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>spring-solace-common</artifactId>
+  <artifactId>spring-common</artifactId>
 
   <dependencies>
-    <dependency>
-      <groupId>com.solace.spring.boot</groupId>
-      <artifactId>solace-spring-boot-starter</artifactId>
-    </dependency>
-
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
-    </dependency>
-
-    <dependency>
-      <groupId>com.downvoteit</groupId>
-      <artifactId>spring-gpb</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.downvoteit</groupId>
-      <artifactId>spring-common</artifactId>
     </dependency>
   </dependencies>
 

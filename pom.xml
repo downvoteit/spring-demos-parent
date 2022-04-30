@@ -51,7 +51,20 @@
     <module>spring-xml</module>
     <module>spring-beanlifecycle</module>
     <module>spring-webflux</module>
+    <module>spring-common</module>
   </modules>
+
+  <developers>
+    <developer>
+      <id>main</id>
+      <name>downvoteit</name>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/downvoteit/spring-demos-parent</url>
+    <connection>scm:git@github.com:downvoteit/spring-demos-parent.git</connection>
+  </scm>
 
   <dependencyManagement>
     <dependencies>
@@ -130,6 +143,11 @@
       <dependency>
         <groupId>com.downvoteit</groupId>
         <artifactId>spring-gpb</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.downvoteit</groupId>
+        <artifactId>spring-common</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

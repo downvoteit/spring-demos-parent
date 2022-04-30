@@ -1,9 +1,9 @@
 package com.downvoteit.springsolaceproducer.controller;
 
-import com.downvoteit.springsolacecommon.dto.ItemRequestDto;
-import com.downvoteit.springsolacecommon.dto.ItemResponseDto;
 import com.downvoteit.springsolaceproducer.service.ItemService;
 import com.solacesystems.jcsmp.JCSMPException;
+import dto.ItemRequestDto;
+import dto.ItemResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

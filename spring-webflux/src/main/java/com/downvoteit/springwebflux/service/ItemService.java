@@ -1,7 +1,7 @@
 package com.downvoteit.springwebflux.service;
 
-import com.downvoteit.springsolacecommon.dto.ItemRequestDto;
-import com.downvoteit.springsolacecommon.dto.ItemResponseDto;
+import dto.ItemRequestDto;
+import dto.ItemResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

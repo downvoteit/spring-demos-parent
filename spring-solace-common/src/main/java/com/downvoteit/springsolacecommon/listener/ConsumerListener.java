@@ -19,12 +19,11 @@ public class ConsumerListener implements XMLMessageListener {
         var data = ItemRequest.parseFrom(bytes);
 
         log.info("Consumed: \n{}", data);
-        log.info("Consumed dump: \n{}", message.dump());
       } catch (InvalidProtocolBufferException e) {
-        log.info("", e);
+        log.error("", e);
       }
     } else {
-      throw new UnsupportedOperationException("Unsupported message type");
+      log.error("Unsupported message type");
     }
 
     message.ackMessage();
@@ -32,6 +31,6 @@ public class ConsumerListener implements XMLMessageListener {
 
   @Override
   public void onException(JCSMPException e) {
-    log.info("Consumed an exception:", e);
+    log.error("Consumed an exception:", e);
   }
 }

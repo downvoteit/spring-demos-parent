@@ -1,14 +1,15 @@
 package com.downvoteit.springsolaceproducer.service;
 
 import com.downvoteit.springgpb.ItemRequest;
-import com.downvoteit.springsolacecommon.dto.ItemRequestDto;
 import com.solacesystems.jcsmp.*;
+import dto.ItemCorKeyDto;
+import dto.ItemRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Slf4j
-@Component
+@Service
 public class ProducerService {
   private final XMLMessageProducer producer;
   private final Queue queue;
@@ -50,7 +51,9 @@ public class ProducerService {
             .setPrice(itemRequestDto.getPrice())
             .build();
 
-    message.setCorrelationKey(data.getId());
+    var corKeyDto = ItemCorKeyDto.builder().id(data.getId()).build();
+
+    message.setCorrelationKey(corKeyDto);
     message.setData(data.toByteArray());
 
     log.info("Produced: \n{}", data);

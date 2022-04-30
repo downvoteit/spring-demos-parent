@@ -36,3 +36,20 @@ reg delete HKEY_CURRENT_USER\Environment /v SPRING_DEMOS_SONAR_TOKEN /f
 # Check a variable
 mvn clean install
 ```
+
+## Schema
+```
+                   Server 7003 WebFlux + WebClient
+                                  |
+                Server 7004 WebFlux + Solace Producer
+                                  |
+                  ----------------------------------
+                  |                                |
+             Server 7005                       Server 7006
+       WebFlux + Solace Consumer        WebFlux + Solace Consumer
+                  |                                |
+       -----------------------                Server 7016
+       |                     |                PostgresSQL
+   Server 7015           Server 7025           
+     Redis               PostgresSQL  
+```

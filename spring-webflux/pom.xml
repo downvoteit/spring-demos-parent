@@ -36,7 +36,7 @@
 
     <dependency>
       <groupId>com.downvoteit</groupId>
-      <artifactId>spring-solace-common</artifactId>
+      <artifactId>spring-common</artifactId>
     </dependency>
   </dependencies>
 

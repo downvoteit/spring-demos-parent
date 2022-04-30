@@ -2,6 +2,7 @@ package com.downvoteit.springsolacecommon.handler;
 
 import com.solacesystems.jcsmp.JCSMPException;
 import com.solacesystems.jcsmp.JCSMPStreamingPublishCorrelatingEventHandler;
+import dto.ItemCorKeyDto;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,11 +19,20 @@ public class ProducerHandler implements JCSMPStreamingPublishCorrelatingEventHan
 
   @Override
   public void responseReceivedEx(Object o) {
+    if (o instanceof ItemCorKeyDto) {
+      ItemCorKeyDto corKeyDto = (ItemCorKeyDto) o;
+      corKeyDto.setAcked(true);
+      corKeyDto.setPublished(true);
+    }
     log.info("Produced a response: {}", o);
   }
 
   @Override
   public void handleErrorEx(Object o, JCSMPException e, long timestamp) {
+    if (o instanceof ItemCorKeyDto) {
+      ItemCorKeyDto corKeyDto = (ItemCorKeyDto) o;
+      corKeyDto.setAcked(true);
+    }
     log.error("Produced an error: {}@{} - {}", o, timestamp, e);
   }
 }
