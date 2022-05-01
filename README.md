@@ -39,7 +39,7 @@ mvn clean install
 
 ## Project schema
 
-### Primary
+### Primary 
 
 - Server 7002 Angular
 - Server 7003 WebFlux + WebClient
@@ -75,7 +75,9 @@ mvn clean install
                       Redis               PostgreSQL
 ```
 
-### Tertiary (Hibernate, SonarQube, Solace)
+### Tertiary 
+
+#### Hibernate
 
 - Server 9001 WebFlux
 - Server 9002 PostgreSQL
@@ -88,6 +90,8 @@ mvn clean install
                                PostgreSQL           
 ```
 
+#### SonarQube
+
 - Server 20001/2 SonarQube
 - Server 20003 PostgreSQL
 
@@ -98,6 +102,8 @@ mvn clean install
                              Server 20003      
                               PostgreSQL        
 ```
+
+#### Solace
 
 - Server 8080 HAProxy
 - Server 212 Solace Primary
