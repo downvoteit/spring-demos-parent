@@ -6,6 +6,14 @@
 
 ## Learning resources
 
+- Solace docs
+  - https://docs.solace.com/Solace-PubSub-Platform.htm
+- Solace core concepts
+  - https://docs.solace.com/Basics/Core-Concepts.htm
+- Solace endpoints
+  - https://docs.solace.com/Basics/Endpoints.htm#Durable_Endpoint_Access_Types
+- Solace JCSMP best practices
+  - https://docs.solace.com/Solace-PubSub-Messaging-APIs/API-Developer-Guide/Java-API-Best-Practices.htm
 - Solace HA docker-compose
   - https://github.com/SolaceLabs/solace-ha-docker-compose
 - Maven Protocol Buffers Plugin
