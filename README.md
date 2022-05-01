@@ -58,6 +58,25 @@ mvn clean install
 - Server 8003 WebFlux + Solace
 - Server 8004 PostgreSQL
 
+### Tertiary 
+
+#### Hibernate
+
+- Server 9001 WebFlux
+- Server 9002 PostgreSQL
+
+#### SonarQube
+
+- Server 20001/2 SonarQube
+- Server 20003 PostgreSQL
+
+#### Solace
+
+- Server 8080 HAProxy
+- Server 212 Solace Primary
+- Server 312 Solace Backup
+- Server 412 Solace Monitoring
+
 ```
                               Server 7002 
                                 Angular
@@ -69,60 +88,31 @@ mvn clean install
                            WebFlux + Solace                                  Angular
                                    |                                            |
                                    ----------------------------------------------
-                                   |                                            |
-                              Server 7005                                  Server 8003
-                           WebFlux + Solace                             WebFlux + Solace 
-                                   |                                            |
-                        -----------------------                            Server 8004
-                        |                     |                             PostgreSQL
-                   Server 7006           Server 7007                       
-                      Redis               PostgreSQL
+                                   |                     |                      |
+                              Server 7005                |                 Server 8003
+                           WebFlux + Solace              |              WebFlux + Solace 
+                                   |                     |                      |
+                        -----------------------          |                 Server 8004
+                        |                     |          |                  PostgreSQL
+                   Server 7006           Server 7007     |                 
+                      Redis               PostgreSQL     |
+                                                         |
+                                                         |
+                                                    Server 8080
+                                                      HAProxy
+                                                         |
+                                      -----------------------------------------
+                                      |                  |                    |
+                                  Server 212         Server 312           Server 412
+                                Solace Primary      Solace Backup      Solace Monitoring
+
+
+                                 Server 20001/2                         Server 9001
+                                   SonarQube                              WebFlux  
+                                       |                                     |     
+                                  Server 20003                          Server 9002
+                                   PostgreSQL                            PostgreSQL
 ```
 
-### Tertiary 
-
-#### Hibernate
-
-- Server 9001 WebFlux
-- Server 9002 PostgreSQL
-
-```
-                              Server 9001           
-                                WebFlux             
-                                   |                
-                              Server 9002           
-                               PostgreSQL           
-```
-
-#### SonarQube
-
-- Server 20001/2 SonarQube
-- Server 20003 PostgreSQL
-
-```
-                             Server 20001/2       
-                               SonarQube        
-                                   |             
-                             Server 20003      
-                              PostgreSQL        
-```
-
-#### Solace
-
-- Server 8080 HAProxy
-- Server 212 Solace Primary
-- Server 312 Solace Backup
-- Server 412 Solace Monitoring
- 
-```
-                                            
-                              Server 8080
-                                HAProxy
-                                   |
-                -----------------------------------------
-                |                  |                    |
-            Server 212         Server 312           Server 412
-          Solace Primary      Solace Backup      Solace Monitoring                                          
-```
 
 

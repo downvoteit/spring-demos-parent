@@ -18,10 +18,7 @@ public class ItemService {
   public ItemResponseDto createItem(String mode, ItemRequestDto itemRequestDto)
       throws JCSMPException {
     return ItemResponseDto.builder()
-        .id(
-            mode.equals("queue")
-                ? producerService.sendQueue(itemRequestDto)
-                : producerService.sendTopic(itemRequestDto))
+        .id(producerService.sendQueue(itemRequestDto))
         .message("Created")
         .build();
   }

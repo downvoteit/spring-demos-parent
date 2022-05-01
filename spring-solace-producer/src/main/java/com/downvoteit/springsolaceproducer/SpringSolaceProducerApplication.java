@@ -5,7 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.downvoteit.*")
+@ComponentScan(
+    basePackages = {
+      "com.downvoteit.springsolaceproducer.*",
+      "com.downvoteit.springsolacecommon.*",
+    })
 public class SpringSolaceProducerApplication {
   public static void main(String[] args) {
     SpringApplication.run(SpringSolaceProducerApplication.class, args);

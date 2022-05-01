@@ -1,45 +1,45 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
   <div>
     <h2>Create Item</h2>
   </div>
   <div>
     <label for="categoryId">Category</label>
-    <select id="categoryId" formControlName="categoryId">
+    <select formControlName="categoryId" id="categoryId">
       <option *ngFor="let item of categories; let i = index" [value]="(i + 1)">{{ item }}</option>
     </select>
   </div>
   <div>
     <label for="name">Name</label>
-    <input type="text"
+    <input [maxLength]="validation.name.max"
+           [minLength]="validation.name.min"
+           [required]="validation.name.required"
+           formControlName="name"
            id="name"
            placeholder="Name"
-           formControlName="name"
-           [minLength]="validation.name.min"
-           [maxLength]="validation.name.max"
-           [required]="validation.name.required">
+           type="text">
   </div>
   <div>
     <label for="amount">Amount</label>
-    <input type="text"
-           id="amount"
-           class="plain-val-left"
-           placeholder="Amount"
-           formControlName="amount"
+    <input [maxLength]="validation.amount.max"
            [minLength]="validation.amount.min"
-           [maxLength]="validation.amount.max"
-           [required]="validation.amount.required">
+           [required]="validation.amount.required"
+           class="plain-val-left"
+           formControlName="amount"
+           id="amount"
+           placeholder="Amount"
+           type="text">
   </div>
   <div>
     <label for="price">Price</label>
-    <input type="text"
-           id="price"
-           class="plain-val-left"
-           placeholder="Price"
-           formControlName="price"
+    <input [maxLength]="validation.price.max"
            [minLength]="validation.price.min"
-           [maxLength]="validation.price.max"
-           [required]="validation.price.required">
+           [required]="validation.price.required"
+           class="plain-val-left"
+           formControlName="price"
+           id="price"
+           placeholder="Price"
+           type="text">
   </div>
-  <button type="submit" [disabled]="form.invalid">Submit</button>
-  <div id="response" *ngIf="response">{{ response.message }}</div>
+  <button [disabled]="form.invalid" type="submit">Submit</button>
+  <div *ngIf="response" id="response">{{ response.message }}</div>
 </form>

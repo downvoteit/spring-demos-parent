@@ -5,7 +5,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import { MainComponent } from './main/main.component';
+import {MainComponent} from './main/main.component';
 
 @NgModule({
   declarations: [

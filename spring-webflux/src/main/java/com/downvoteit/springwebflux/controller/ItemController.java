@@ -34,7 +34,7 @@ public class ItemController {
 
   @PostMapping("/{mode}")
   public Mono<ItemResponseDto> createItem(
-      @PathVariable() String mode, @RequestBody ItemRequestDto itemRequestDto) {
+      @PathVariable String mode, @RequestBody ItemRequestDto itemRequestDto) {
     return itemService.createItem(mode, itemRequestDto);
   }
 }

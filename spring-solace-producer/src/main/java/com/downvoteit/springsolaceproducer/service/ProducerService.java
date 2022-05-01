@@ -1,6 +1,7 @@
 package com.downvoteit.springsolaceproducer.service;
 
 import com.downvoteit.springgpb.ItemRequest;
+import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.solacesystems.jcsmp.*;
 import dto.ItemCorKeyDto;
 import dto.ItemRequestDto;
@@ -11,29 +12,32 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class ProducerService {
-  private final XMLMessageProducer producer;
-  private final Queue queue;
-  private final Topic topic;
+  private final JCSMPSession session;
+  private final Queue queuePrimary;
+  private final Queue queueSecondary;
 
   public ProducerService(
-      XMLMessageProducer producer, Queue queue, @Qualifier("ledger") Topic topic) {
-    this.producer = producer;
-    this.queue = queue;
-    this.topic = topic;
+      JCSMPSession session,
+      @Qualifier("queue-primary") Queue queuePrimary,
+      @Qualifier("queue-secondary") Queue queueSecondary) {
+    this.session = session;
+    this.queuePrimary = queuePrimary;
+    this.queueSecondary = queueSecondary;
   }
 
   public Integer sendQueue(ItemRequestDto itemRequestDto) throws JCSMPException {
-    BytesMessage message = sendBytes(itemRequestDto);
+    BytesMessage messagePrimary = sendBytes(itemRequestDto);
+    BytesMessage messageSecondary = sendBytes(itemRequestDto);
 
-    producer.send(message, queue);
-
-    return itemRequestDto.getId();
-  }
-
-  public Integer sendTopic(ItemRequestDto itemRequestDto) throws JCSMPException {
-    BytesMessage message = sendBytes(itemRequestDto);
-
-    producer.send(message, topic);
+    var producerPrimary = session.getMessageProducer(new ProducerHandler());
+    var producerSecondary = session.getMessageProducer(new ProducerHandler());
+    try {
+      producerPrimary.send(messagePrimary, queuePrimary);
+      producerSecondary.send(messageSecondary, queueSecondary);
+    } finally {
+      producerPrimary.close();
+      producerSecondary.close();
+    }
 
     return itemRequestDto.getId();
   }

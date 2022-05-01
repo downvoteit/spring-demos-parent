@@ -29,7 +29,7 @@ export enum CategoriesEnum {
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit, OnDestroy {
-  url = 'http://localhost:7003/items/topic';
+  url = 'http://localhost:7003/items/queue';
   subscriptions: Subscription[] = [];
   categories: CategoriesEnum[] = Object.values(CategoriesEnum);
   default: ItemRequest = {id: 0, categoryId: 1, name: '', amount: 0, price: 0.0};
@@ -39,10 +39,6 @@ export class MainComponent implements OnInit, OnDestroy {
     price: {required: true, min: 1, max: 12}
   };
   response: ItemResponse | undefined;
-
-  constructor(private builder: FormBuilder, private http: HttpClient) {
-  }
-
   form = this.builder.group({
     id: [this.default.id],
     categoryId: [this.default.categoryId, Validators.required],
@@ -64,7 +60,10 @@ export class MainComponent implements OnInit, OnDestroy {
       Validators.maxLength(this.validation.price.max),
       ValidationService.validateNumericAndGteZero,
     ])],
-  })
+  });
+
+  constructor(private builder: FormBuilder, private http: HttpClient) {
+  }
 
   ngOnInit(): void {
   }

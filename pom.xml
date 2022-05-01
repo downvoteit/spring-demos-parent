@@ -47,7 +47,8 @@
     <module>spring-gpb</module>
     <module>spring-solace-common</module>
     <module>spring-solace-producer</module>
-    <module>spring-solace-consumer</module>
+    <module>spring-solace-consumer-one</module>
+    <module>spring-solace-consumer-two</module>
     <module>spring-xml</module>
     <module>spring-beanlifecycle</module>
     <module>spring-webflux</module>
