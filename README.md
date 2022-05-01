@@ -39,7 +39,9 @@ mvn clean install
 
 ## Project schema
 
-### Primary 
+### Primary
+
+#### Ledger (OLTP)
 
 - Server 7002 Angular
 - Server 7003 WebFlux + WebClient
@@ -49,6 +51,8 @@ mvn clean install
 - Server 7007 PostgreSQL 
 
 ### Secondary
+
+#### Analytics (OLAP)
 
 - Server 8002 Angular
 - Server 8003 WebFlux + Solace
