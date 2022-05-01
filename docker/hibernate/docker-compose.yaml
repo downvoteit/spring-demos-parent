@@ -6,23 +6,59 @@ networks:
     driver: bridge
 
 volumes:
-  pg:
-    name: spring_demos_hibernate_pg
-  pg_data:
-    name: spring_demos_hibernate_pg_data
+  pg_one:
+    name: spring_demos_hibernate_pg_one
+  pg_data_one:
+    name: spring_demos_hibernate_pg_data_one
+  pg_two:
+    name: spring_demos_hibernate_pg_two
+  pg_data_two:
+    name: spring_demos_hibernate_pg_data_two
+  pg_three:
+    name: spring_demos_hibernate_pg_three
+  pg_data_three:
+    name: spring_demos_hibernate_pg_data_three
 
 services:
-  db:
-    container_name: spring_demos_hibernate_pg
-    hostname: db
+  db_one:
+    container_name: spring_demos_hibernate_one
+    hostname: db_one
     image: postgres:14.2
     restart: unless-stopped
     ports:
-      - 7001:5432
+      - 9002:5432
     environment:
-      POSTGRES_PASSWORD: spring_demos_hibernate_pg
+      POSTGRES_PASSWORD: postgres
     volumes:
-      - pg:/var/lib/postgresql
-      - pg_data:/var/lib/postgresql/data
+      - pg_one:/var/lib/postgresql
+      - pg_data_one:/var/lib/postgresql/data
+    networks:
+      - spring_demos
+  db_two:
+    container_name: spring_demos_hibernate_two
+    hostname: db_two
+    image: postgres:14.2
+    restart: unless-stopped
+    ports:
+      - 7007:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pg_two:/var/lib/postgresql
+      - pg_data_two:/var/lib/postgresql/data
+    networks:
+      - spring_demos
+  db_three:
+    container_name: spring_demos_hibernate_three
+    hostname: db_three
+    image: postgres:14.2
+    restart: unless-stopped
+    ports:
+      - 8004:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pg_three:/var/lib/postgresql
+      - pg_data_three:/var/lib/postgresql/data
     networks:
       - spring_demos

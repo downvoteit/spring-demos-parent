@@ -9,7 +9,7 @@ spring:
     hikari:
       connection-test-query: select 1
       auto-commit: false
-      maximum-pool-size: 10
+      maximum-pool-size: 3
   jpa:
     show-sql: false
     generate-ddl: true
@@ -33,7 +33,7 @@ spring:
     enabled: false
 
 server:
-  port: 7002
+  port: 9001
 
 logging:
   level.org.hibernate.SQL: INFO

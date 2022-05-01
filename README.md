@@ -37,7 +37,7 @@ reg delete HKEY_CURRENT_USER\Environment /v SPRING_DEMOS_SONAR_TOKEN /f
 mvn clean install
 ```
 
-## Possible schema
+## Project schema
 
 ### Primary
 
@@ -55,24 +55,64 @@ mvn clean install
 - Server 8004 PostgreSQL
 
 ```
-               Server 7002 
-                 Angular
-                    |
-               Server 7003 
-            WebFlux + WebClient
-                    |
-               Server 7004                                  Server 8002 
-            WebFlux + Solace                                  Angular
-                    |                                            |
-                    ----------------------------------------------
-                    |                                            |
-               Server 7005                                  Server 8003
-            WebFlux + Solace                              WebFlux + Solace 
-                    |                                            |
-         -----------------------                            Server 8004
-         |                     |                             PostgreSQL
-    Server 7006           Server 7007                       
-       Redis               PostgreSQL  
+                              Server 7002 
+                                Angular
+                                   |
+                              Server 7003 
+                           WebFlux + WebClient
+                                   |
+                              Server 7004                                  Server 8002 
+                           WebFlux + Solace                                  Angular
+                                   |                                            |
+                                   ----------------------------------------------
+                                   |                                            |
+                              Server 7005                                  Server 8003
+                           WebFlux + Solace                             WebFlux + Solace 
+                                   |                                            |
+                        -----------------------                            Server 8004
+                        |                     |                             PostgreSQL
+                   Server 7006           Server 7007                       
+                      Redis               PostgreSQL
+```
+
+### Tertiary (Hibernate, SonarQube, Solace)
+
+- Server 9001 WebFlux
+- Server 9002 PostgreSQL
+
+```
+                              Server 9001           
+                                WebFlux             
+                                   |                
+                              Server 9002           
+                               PostgreSQL           
+```
+
+- Server 20001/2 SonarQube
+- Server 20003 PostgreSQL
+
+```
+                             Server 20001/2       
+                               SonarQube        
+                                   |             
+                             Server 20003      
+                              PostgreSQL        
+```
+
+- Server 8080 HAProxy
+- Server 212 Solace Primary
+- Server 312 Solace Backup
+- Server 412 Solace Monitoring
+ 
+```
+                                            
+                              Server 8080
+                                HAProxy
+                                   |
+                -----------------------------------------
+                |                  |                    |
+            Server 212         Server 312           Server 412
+          Solace Primary      Solace Backup      Solace Monitoring                                          
 ```
 
 

@@ -2,14 +2,14 @@ spring:
   main:
     banner-mode: off
   datasource:
-    url: jdbc:postgresql://localhost:7001/postgres
+    url: jdbc:postgresql://localhost:9002/postgres
     username: postgres
-    password: spring_demos_hibernate_pg
+    password: postgres
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-test-query: select 1
       auto-commit: false
-      maximum-pool-size: 10
+      maximum-pool-size: 3
   jpa:
     show-sql: false
     generate-ddl: true
@@ -32,15 +32,16 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/versions
-    url: jdbc:postgresql://localhost:7001/postgres
+    url: jdbc:postgresql://localhost:9002/postgres
     user: postgres
-    password: spring_demos_hibernate_pg
+    password: postgres
     schemas: postgres
 
 server:
-  port: 7002
+  port: 9001
 
 logging:
-  level.org.hibernate.SQL: INFO
-  level.org.hibernate.SQL_SLOW: TRACE
-  level.org.hibernate.type.descriptor.sql.BasicBinder: INFO
+  level:
+    org.hibernate.SQL: INFO
+    org.hibernate.SQL_SLOW: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO

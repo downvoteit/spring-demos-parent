@@ -23,6 +23,8 @@ services:
     hostname: db
     image: postgres:14.2
     restart: unless-stopped
+    ports:
+      - 20003:5432
     environment:
       POSTGRES_USER: sonar
       POSTGRES_PASSWORD: sonar

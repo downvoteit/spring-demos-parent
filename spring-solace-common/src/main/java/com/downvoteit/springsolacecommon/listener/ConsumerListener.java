@@ -13,20 +13,24 @@ public class ConsumerListener implements XMLMessageListener {
   @Override
   public void onReceive(BytesXMLMessage message) {
     if (message instanceof BytesMessage) {
-      var bytes = ((BytesMessage) message).getData();
-
-      try {
-        var data = ItemRequest.parseFrom(bytes);
-
-        log.info("Consumed: \n{}", data);
-      } catch (InvalidProtocolBufferException e) {
-        log.error("", e);
-      }
+      parseMessage((BytesMessage) message);
     } else {
       log.error("Unsupported message type");
     }
 
     message.ackMessage();
+  }
+
+  protected void parseMessage(BytesMessage message) {
+    var bytes = message.getData();
+
+    try {
+      var data = ItemRequest.parseFrom(bytes);
+
+      log.info("Consumed: \n{}", data);
+    } catch (InvalidProtocolBufferException e) {
+      log.error("", e);
+    }
   }
 
   @Override

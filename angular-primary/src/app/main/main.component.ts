@@ -18,9 +18,9 @@ interface ItemResponse {
 }
 
 export enum CategoriesEnum {
-  p = 'Primary',
-  s = 'Secondary',
-  t = 'Tertiary',
+  primary = 'Primary',
+  secondary = 'Secondary',
+  tertiary = 'Tertiary',
 }
 
 @Component({
