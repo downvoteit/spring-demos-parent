@@ -8,6 +8,15 @@ export class ValidationService {
   constructor() {
   }
 
+  static validateLength(control: AbstractControl): { [key: string]: any } {
+    const pattern = /[^a-zA-Z-_\d]+/i;
+    if (pattern.test(control.value)) {
+      return {notAlphaNumeric: true};
+    } else {
+      return {};
+    }
+  }
+
   static validateNameAlphaNumeric(control: AbstractControl): { [key: string]: any } {
     const pattern = /[^a-zA-Z-_\d]+/i;
     if (pattern.test(control.value)) {

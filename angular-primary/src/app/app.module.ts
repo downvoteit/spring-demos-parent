@@ -5,12 +5,16 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {MainComponent} from './main/main.component';
+import {CreateItemComponent} from './create-item/create-item.component';
+import {GetItemComponent} from './get-item/get-item.component';
+import {GetItemsComponent} from './get-items/get-items.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent
+    CreateItemComponent,
+    GetItemComponent,
+    GetItemsComponent
   ],
   imports: [
     BrowserModule,

@@ -105,7 +105,6 @@ mvn clean install
                    Server 7006           Server 7007     |                 
                       Redis               PostgreSQL     |
                                                          |
-                                                         |
                                                     Server 8080
                                                       HAProxy
                                                          |
@@ -122,5 +121,16 @@ mvn clean install
                                    PostgreSQL                            PostgreSQL
 ```
 
+## Operation schema
 
+### Async create item
 
+- Create an item in Server 7005 and add stats in Server 8003
+- On duplicate error from Server 7005 send a compensatory operation to Server 8003
+
+```
+    Server 7004 ------- create item ----> Server 7005 --- duplicate error ----
+                   |                                                         |
+                   |                                                         |
+                   ---- add stats ------> Server 8003 <--- substract stats ---
+```
