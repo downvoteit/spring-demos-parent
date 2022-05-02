@@ -40,7 +40,7 @@ public class ItemService {
   private ItemRequestDto createRandomItem(Integer id) {
     return ItemRequestDto.builder()
         .id(id != null ? id : random.nextInt(10))
-        .categoryId(random.nextInt(100))
+        .categoryId(random.nextInt(3))
         .name("New item")
         .amount(random.nextInt(10000))
         .price(random.nextInt(10) * 10_000 * random.nextDouble())

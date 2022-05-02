@@ -125,8 +125,8 @@ mvn clean install
 
 ### Async create item
 
-- Create an item in Server 7005 and add stats in Server 8003
-- On duplicate error from Server 7005 send a compensatory operation to Server 8003
+- Create an item on Server 7005 and add stats on Server 8003
+- On duplicate error on Server 7005 send a compensatory operation to Server 8003
 
 ```
     Server 7004 ------- create item ----> Server 7005 --- duplicate error ----

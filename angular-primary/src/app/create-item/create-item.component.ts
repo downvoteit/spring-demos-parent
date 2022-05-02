@@ -46,7 +46,7 @@ import {environment} from "../../environments/environment";
                type="text">
       </div>
       <div class="plain-btn">
-        <button [disabled]="form.invalid" type="submit">Submit</button>
+        <button [disabled]="form.invalid" type="submit">Add</button>
       </div>
       <div *ngIf="response" id="response">{{ response.message }}</div>
     </form>
@@ -59,11 +59,11 @@ export class CreateItemComponent implements OnInit, OnDestroy {
   default: ItemRequest = {id: 0, categoryId: 1, name: '', amount: 0, price: 0.0};
   response: ItemResponse | undefined;
   form = this.builder.group({
-    id: [this.default.id],
-    categoryId: [this.default.categoryId, Validators.required],
-    name: [this.default.name, Validators.compose([Validators.required, ValidationService.validateNameAlphaNumeric])],
-    amount: [this.default.amount, Validators.compose([Validators.required, ValidationService.validateNumericAndGteZero])],
-    price: [this.default.price, Validators.compose([Validators.required, ValidationService.validateNumericAndGteZero])],
+    id: [{value: this.default.id, disabled: false}],
+    categoryId: [{value: this.default.categoryId, disabled: false}, [Validators.required]],
+    name: [{value: this.default.name, disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNameAlphaNumeric])]],
+    amount: [{value: this.default.amount, disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNumericAndGteZero])]],
+    price: [{value: this.default.price, disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNumericAndGteZero])]],
   });
 
   constructor(private builder: FormBuilder, private http: HttpClient) {

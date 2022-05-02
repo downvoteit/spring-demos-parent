@@ -15,6 +15,7 @@ import {environment} from "../../environments/environment";
         <table aria-describedby="items">
           <thead>
           <tr>
+            <th id="name">#</th>
             <th id="name">Name</th>
             <th id="amount">Amount</th>
             <th id="price">Price</th>
@@ -23,10 +24,11 @@ import {environment} from "../../environments/environment";
           </thead>
           <tbody>
           <ng-container *ngIf="loaded; else noData">
-            <tr *ngFor="let i of data">
-              <td>{{ i.name }}</td>
-              <td class="plain-tbl-right">{{ i.amount }}</td>
-              <td class="plain-tbl-right">{{ i.price }}</td>
+            <tr *ngFor="let item of data; let i = index">
+              <td class="plain-tbl-center">{{ (i + 1) }}</td>
+              <td>{{ item.name }}</td>
+              <td class="plain-tbl-right">{{ item.amount }}</td>
+              <td class="plain-tbl-right">{{ item.price }}</td>
               <td class="plain-tbl-center">
                 <button (click)="deleteItem()">Delete</button>
               </td>
@@ -34,6 +36,7 @@ import {environment} from "../../environments/environment";
           </ng-container>
           <ng-template #noData>
             <tr>
+              <td>&nbsp;</td>
               <td>&nbsp;</td>
               <td>No data found</td>
               <td>&nbsp;</td>
@@ -64,19 +67,14 @@ export class GetItemsComponent implements OnInit, OnDestroy {
   }
 
   getItems() {
-    try {
+    const subscription = this.http
+      .get<ItemRequest[]>(`${environment.baseUrl}/items`, {headers: headers})
+      .subscribe(response => {
+        this.data = response;
+        this.loaded = true;
+      });
 
-      const subscription = this.http
-        .get<ItemRequest[]>(`${environment.baseUrl}/items/all`, {headers: headers})
-        .subscribe(response => {
-          this.data = response;
-          this.loaded = true;
-        });
-
-      this.subscriptions.push(subscription);
-    } catch (e) {
-      console.error(e);
-    }
+    this.subscriptions.push(subscription);
   }
 
   deleteItem() {

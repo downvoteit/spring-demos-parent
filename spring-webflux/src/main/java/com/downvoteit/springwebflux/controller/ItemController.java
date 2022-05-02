@@ -20,12 +20,12 @@ public class ItemController {
     this.itemService = itemService;
   }
 
-  @GetMapping
-  public Mono<ItemRequestDto> getItem() {
+  @GetMapping("/{name}")
+  public Mono<ItemRequestDto> getItem(@PathVariable String name) {
     return Mono.fromCallable(itemService::getItem);
   }
 
-  @GetMapping("/all")
+  @GetMapping
   public Flux<ItemRequestDto> getItems() {
     return Flux.fromStream(itemService.getItems());
   }
