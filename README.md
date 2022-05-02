@@ -137,6 +137,8 @@ mvn clean install
                     ---- add stats ------> Server 8003 <--- substract stats ---
 ```
 
+![create item ui](documents/create_item_ui.png)
+
 ### Get item
 
 - Send a name to Server 7005
@@ -150,3 +152,5 @@ mvn clean install
                     |                       |
             (reply) <------- get item -------           
 ```
+
+![get item ui](documents/get_item_ui.png)
