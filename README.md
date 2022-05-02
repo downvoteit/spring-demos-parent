@@ -86,39 +86,39 @@ mvn clean install
 - Server 412 Solace Monitoring
 
 ```
-                              Server 7002 
-                                Angular
-                                   |
-                              Server 7003 
-                           WebFlux + WebClient
-                                   |
-                              Server 7004                                  Server 8002 
-                           WebFlux + Solace                                  Angular
-                                   |                                            |
-                                   ----------------------------------------------
-                                   |                     |                      |
-                              Server 7005                |                 Server 8003
-                           WebFlux + Solace              |              WebFlux + Solace 
-                                   |                     |                      |
-                        -----------------------          |                 Server 8004
-                        |                     |          |                  PostgreSQL
-                   Server 7006           Server 7007     |                 
-                      Redis               PostgreSQL     |
-                                                         |
-                                                    Server 8080
-                                                      HAProxy
-                                                         |
-                                      -----------------------------------------
-                                      |                  |                    |
-                                  Server 212         Server 312           Server 412
-                                Solace Primary      Solace Backup      Solace Monitoring
+               Server 7002 
+                 Angular
+                    |
+               Server 7003 
+            WebFlux + WebClient
+                    |
+               Server 7004                                  Server 8002 
+            WebFlux + Solace                                  Angular
+                    |                                            |
+                    ----------------------------------------------
+                    |                     |                      |
+               Server 7005                |                 Server 8003
+            WebFlux + Solace              |              WebFlux + Solace 
+                    |                     |                      |
+         -----------------------          |                 Server 8004
+         |                     |          |                  PostgreSQL
+    Server 7006           Server 7007     |                 
+       Redis               PostgreSQL     |
+                                          |
+                                     Server 8080
+                                       HAProxy
+                                          |
+                       -----------------------------------------
+                       |                  |                    |
+                   Server 212         Server 312           Server 412
+                 Solace Primary      Solace Backup      Solace Monitoring
 
 
-                                 Server 20001/2                         Server 9001
-                                   SonarQube                              WebFlux  
-                                       |                                     |     
-                                  Server 20003                          Server 9002
-                                   PostgreSQL                            PostgreSQL
+                  Server 20001/2                         Server 9001
+                    SonarQube                              WebFlux  
+                        |                                     |     
+                   Server 20003                          Server 9002
+                    PostgreSQL                            PostgreSQL
 ```
 
 ## Operation schema
