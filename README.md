@@ -143,7 +143,7 @@ mvn clean install
 
 - Send a name to Server 7005
 - Receive an item from Server 7004
-- Features: Async (non-blocking), Eventual consistency, Non-durable (Direct), Exclusive, Byte transfer (Google Protobuf)
+- Features: Async (non-blocking), Non-durable (Direct), Exclusive, Byte transfer (Google Protobuf)
 
 ```
                     ------- send name ------> (request)
