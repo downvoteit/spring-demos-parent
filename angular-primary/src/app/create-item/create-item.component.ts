@@ -11,7 +11,7 @@ import {environment} from "../../environments/environment";
   template: `
     <form (ngSubmit)="onSubmit()" [formGroup]="form">
       <div>
-        <h2>Add new item</h2>
+        <h2>Add a new item</h2>
       </div>
       <div>
         <label for="categoryId">Category</label>

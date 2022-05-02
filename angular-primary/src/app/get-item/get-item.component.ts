@@ -24,7 +24,7 @@ import {ValidationService} from "../validation/validation.service";
         <input minlength="3" maxlength="20" required
                formControlName="name"
                id="name"
-               placeholder="Name"
+               placeholder="Please enter a Name"
                type="text">
       </div>
       <div>
