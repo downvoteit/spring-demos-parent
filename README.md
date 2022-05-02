@@ -121,7 +121,7 @@ mvn clean install
                     PostgreSQL                            PostgreSQL
 ```
 
-## Operation schema
+## Feature schema
 
 ### Create item
 
