@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Subscription} from "rxjs";
-import {headers, ItemRequest} from "../app.types";
+import {AppHttpHeaders, ItemRequest} from "../app.types";
 import {environment} from "../../environments/environment";
 
 @Component({
@@ -51,9 +51,9 @@ import {environment} from "../../environments/environment";
   styles: []
 })
 export class GetItemsComponent implements OnInit, OnDestroy {
+  subscriptions: Subscription[] = [];
   data: ItemRequest[] = [];
   loaded = false;
-  subscriptions: Subscription[] = [];
 
   constructor(private http: HttpClient) {
   }
@@ -68,7 +68,7 @@ export class GetItemsComponent implements OnInit, OnDestroy {
 
   getItems() {
     const subscription = this.http
-      .get<ItemRequest[]>(`${environment.baseUrl}/items`, {headers: headers})
+      .get<ItemRequest[]>(`${environment.baseUrl}/items`, {headers: AppHttpHeaders})
       .subscribe(response => {
         this.data = response;
         this.loaded = true;

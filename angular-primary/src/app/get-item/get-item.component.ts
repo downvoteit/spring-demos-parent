@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CategoriesEnum, headers, ItemRequest} from "../app.types";
-import {FormBuilder, Validators} from "@angular/forms";
+import {AppHttpHeaders, CategoriesEnum, CategoryArray, ItemRequest, ItemRequestDefault} from "../app.types";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {Subscription} from "rxjs";
 import {environment} from "../../environments/environment";
@@ -55,18 +55,20 @@ import {ValidationService} from "../validation/validation.service";
 })
 export class GetItemComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
-  categories: CategoriesEnum[] = Object.values(CategoriesEnum);
-  default: ItemRequest = {id: 0, categoryId: 1, name: '', amount: 0, price: 0.0};
-  response: string | undefined;
-  form = this.builder.group({
-    id: [{value: this.default.id, disabled: true}],
-    categoryId: [{value: this.default.categoryId, disabled: true}],
-    name: [{value: this.default.name, disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNameAlphaNumeric])]],
-    amount: [{value: this.default.amount, disabled: true}],
-    price: [{value: this.default.price, disabled: true}],
-  });
+  categories: CategoriesEnum[] = CategoryArray;
+  response: string = '';
+  form: FormGroup;
 
   constructor(private builder: FormBuilder, private http: HttpClient) {
+    this.form = this.builder.group({
+      id: [{value: '', disabled: true}],
+      categoryId: [{value: '', disabled: true}],
+      name: [{value: '', disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNameAlphaNumeric])]],
+      amount: [{value: '', disabled: true}],
+      price: [{value: '', disabled: true}],
+    });
+
+    this.form.patchValue(ItemRequestDefault);
   }
 
   ngOnInit(): void {
@@ -86,7 +88,7 @@ export class GetItemComponent implements OnInit, OnDestroy {
     this.response = 'Searching...';
 
     const subscription = this.http
-      .get<ItemRequest>(`${environment.baseUrl}/items/${name}`, {headers: headers})
+      .get<ItemRequest>(`${environment.baseUrl}/items/${name}`, {headers: AppHttpHeaders})
       .subscribe(response => {
         this.form.patchValue(response);
         this.response = 'Found';

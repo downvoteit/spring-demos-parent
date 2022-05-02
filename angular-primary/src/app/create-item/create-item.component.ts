@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidationService} from "../validation/validation.service";
 import {HttpClient} from "@angular/common/http";
 import {interval, Subscription} from "rxjs";
-import {CategoriesEnum, ItemRequest, ItemResponse} from "../app.types";
+import {CategoriesEnum, CategoryArray, ItemRequest, ItemRequestDefault, ItemResponse, ItemResponseDefault} from "../app.types";
 import {environment} from "../../environments/environment";
 
 @Component({
@@ -55,18 +55,20 @@ import {environment} from "../../environments/environment";
 })
 export class CreateItemComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
-  categories: CategoriesEnum[] = Object.values(CategoriesEnum);
-  default: ItemRequest = {id: 0, categoryId: 1, name: '', amount: 0, price: 0.0};
-  response: ItemResponse | undefined;
-  form = this.builder.group({
-    id: [{value: this.default.id, disabled: false}],
-    categoryId: [{value: this.default.categoryId, disabled: false}, [Validators.required]],
-    name: [{value: this.default.name, disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNameAlphaNumeric])]],
-    amount: [{value: this.default.amount, disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNumericAndGteZero])]],
-    price: [{value: this.default.price, disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNumericAndGteZero])]],
-  });
+  categories: CategoriesEnum[] = CategoryArray;
+  response: ItemResponse = ItemResponseDefault;
+  form: FormGroup;
 
   constructor(private builder: FormBuilder, private http: HttpClient) {
+    this.form = this.builder.group({
+      id: [{value: '', disabled: false}],
+      categoryId: [{value: '', disabled: false}, [Validators.required]],
+      name: [{value: '', disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNameAlphaNumeric])]],
+      amount: [{value: '', disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNumericAndGteZero])]],
+      price: [{value: '', disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNumericAndGteZero])]],
+    });
+
+    this.form.patchValue(ItemRequestDefault);
   }
 
   ngOnInit(): void {
@@ -82,15 +84,15 @@ export class CreateItemComponent implements OnInit, OnDestroy {
 
       const request: ItemRequest = this.form.value;
 
-      this.response = await this.http
+      this.response = <ItemResponse>await this.http
         .post<ItemResponse>(`${environment.baseUrl}/items/queue`, request)
         .toPromise();
 
-      let subscription = interval(3000).subscribe(() => this.response = undefined);
+      let subscription = interval(3000).subscribe(() => this.response = ItemResponseDefault);
       this.subscriptions.push(subscription);
 
       this.form.reset();
-      this.form.patchValue(this.default);
+      this.form.patchValue(ItemRequestDefault);
     } catch (e) {
       console.error(e);
     } finally {
