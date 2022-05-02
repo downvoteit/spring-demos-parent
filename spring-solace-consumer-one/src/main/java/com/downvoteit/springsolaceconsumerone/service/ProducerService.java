@@ -16,7 +16,7 @@ public class ProducerService {
     this.queueSecondaryRollback = queueSecondaryRollback;
   }
 
-  public void rollbackMessage(ItemRequest data, XMLMessageProducer producerSecondaryRollback) {
+  public void createItemRollbackMessage(ItemRequest data, XMLMessageProducer producerSecondaryRollback) {
     try {
       var rollbackMessage = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
       rollbackMessage.setDeliveryMode(DeliveryMode.PERSISTENT);

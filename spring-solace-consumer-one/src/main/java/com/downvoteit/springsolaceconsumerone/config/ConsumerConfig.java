@@ -57,7 +57,7 @@ public class ConsumerConfig {
             } catch (PersistenceException e) {
               log.warn("Consumed a PersistenceException: {}", e.getMessage());
 
-              service.rollbackMessage(data, producerSecondaryRollback);
+              service.createItemRollbackMessage(data, producerSecondaryRollback);
             }
           }
         };
