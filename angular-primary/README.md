@@ -23,5 +23,5 @@ sonar.typescript.lcov.reportPaths=coverage/lcov.info
 ## Run Sonar Scanner
 
 ```bash
-npm run sonar -Dsonar.host.url=${SPRING_DEMOS_SONAR_URL} -Dsonar.login=${SPRING_DEMOS_SONAR_TOKEN}
+npm run sonar -- -Dsonar.host.url=${SPRING_DEMOS_SONAR_URL} -Dsonar.login=${SPRING_DEMOS_SONAR_TOKEN}
 ```
