@@ -17,3 +17,7 @@ message ItemResponse {
   int32 id = 1;
   string message = 2;
 }
+
+message ItemNameRequest {
+  string name = 1;
+}

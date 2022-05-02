@@ -123,14 +123,30 @@ mvn clean install
 
 ## Operation schema
 
-### Async create item
+### Create item
 
 - Create an item on Server 7005 and add stats on Server 8003
 - On duplicate error on Server 7005 send a compensatory operation to Server 8003
+- Features: Async (non-blocking), Eventual consistency, Durable, Exclusive, Byte transfer (Google Protobuf)
 
 ```
-    Server 7004 ------- create item ----> Server 7005 --- duplicate error ----
-                   |                                                         |
-                   |                                                         |
-                   ---- add stats ------> Server 8003 <--- substract stats ---
+                    ---- create item ----> Server 7005 --- duplicate error ----
+                    |                                                         |
+    Server 7004 --- |                                                         |
+                    |                                                         |
+                    ---- add stats ------> Server 8003 <--- substract stats ---
+```
+
+### Get item
+
+- Send a name to Server 7005
+- Receive an item from Server 7004
+- Features: Async (non-blocking), Eventual consistency, Non-durable (Direct), Exclusive, Byte transfer (Google Protobuf)
+
+```
+                    ------- send name ------> (request)
+                    |                       |
+    Server 7004 --- |                       | --- Server 7005
+                    |                       |
+            (reply) <------- get item -------           
 ```

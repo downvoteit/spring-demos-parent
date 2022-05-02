@@ -18,11 +18,11 @@ import javax.persistence.PersistenceException;
 
 @Slf4j
 @Configuration
-public class SolaceConsumerConfig {
+public class ConsumerConfig {
   private final EntityManagerFactory factory;
   private final ProducerService service;
 
-  public SolaceConsumerConfig(EntityManagerFactory factory, ProducerService service) {
+  public ConsumerConfig(EntityManagerFactory factory, ProducerService service) {
     this.factory = factory;
     this.service = service;
   }
@@ -55,7 +55,7 @@ public class SolaceConsumerConfig {
 
               log.info("Consumed: \n{}", data);
             } catch (PersistenceException e) {
-              log.warn("Consumed an error: {}", e.getMessage());
+              log.warn("Consumed a PersistenceException: {}", e.getMessage());
 
               service.rollbackMessage(data, producerSecondaryRollback);
             }

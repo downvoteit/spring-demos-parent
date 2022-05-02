@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 
 @Component
-public class SolaceSessionHandler {
+public class SessionHandler {
   private final JCSMPSession session;
 
-  public SolaceSessionHandler(JCSMPSession session) {
+  public SessionHandler(JCSMPSession session) {
     this.session = session;
   }
 

@@ -22,13 +22,26 @@ public class ItemController {
     this.itemService = itemService;
   }
 
-  @PostMapping("/{mode}")
-  public Mono<ItemResponseDto> createItem(
-      @PathVariable() String mode, @RequestBody ItemRequestDto itemRequestDto) {
+  @PostMapping
+  public Mono<ItemResponseDto> createItem(@RequestBody ItemRequestDto itemRequestDto) {
     return Mono.defer(
         () -> {
           try {
-            var itemMessage = itemService.createItem(mode, itemRequestDto);
+            var itemMessage = itemService.createItem(itemRequestDto);
+
+            return Mono.just(itemMessage);
+          } catch (JCSMPException e) {
+            return Mono.error(e);
+          }
+        });
+  }
+
+  @GetMapping("/{name}")
+  public Mono<ItemRequestDto> getItem(@PathVariable String name) {
+    return Mono.defer(
+        () -> {
+          try {
+            var itemMessage = itemService.getItem(name);
 
             return Mono.just(itemMessage);
           } catch (JCSMPException e) {

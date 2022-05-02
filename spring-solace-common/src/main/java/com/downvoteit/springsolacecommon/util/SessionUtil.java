@@ -5,8 +5,8 @@ import com.solacesystems.jcsmp.JCSMPSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SolaceSessionUtil {
-  private SolaceSessionUtil() {}
+public class SessionUtil {
+  private SessionUtil() {}
 
   public static void checkCapabilities(JCSMPSession session) {
     if (session.isCapable(CapabilityType.PUB_GUARANTEED)

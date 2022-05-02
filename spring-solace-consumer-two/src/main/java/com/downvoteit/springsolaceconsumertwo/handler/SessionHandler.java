@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 
 @Component
-public class SolaceSessionHandler {
+public class SessionHandler {
   private final JCSMPSession session;
   private final FlowReceiver receiver;
   private final FlowReceiver receiverRollback;
 
-  public SolaceSessionHandler(
+  public SessionHandler(
       JCSMPSession session,
       @Qualifier("createFlowReceiver") FlowReceiver receiver,
       @Qualifier("createFlowReceiverRollback") FlowReceiver receiverRollback) {

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidationService} from "../validation/validation.service";
 import {HttpClient} from "@angular/common/http";
@@ -21,7 +21,7 @@ import {environment} from "../../environments/environment";
       </div>
       <div>
         <label for="name">Name</label>
-        <input minlength="3" maxlength="20" required
+        <input minlength="3" maxlength="20" required #name
                formControlName="name"
                id="name"
                placeholder="Name"
@@ -53,7 +53,8 @@ import {environment} from "../../environments/environment";
   `,
   styles: []
 })
-export class CreateItemComponent implements OnInit, OnDestroy {
+export class CreateItemComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('name') name!: ElementRef;
   subscriptions: Subscription[] = [];
   categories: CategoriesEnum[] = CategoryArray;
   response: ItemResponse = ItemResponseDefault;
@@ -78,6 +79,10 @@ export class CreateItemComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
+  ngAfterViewInit(): void {
+    this.name.nativeElement.focus();
+  }
+
   async onSubmit() {
     try {
       this.form.disable();
@@ -85,10 +90,10 @@ export class CreateItemComponent implements OnInit, OnDestroy {
       const request: ItemRequest = this.form.value;
 
       this.response = <ItemResponse>await this.http
-        .post<ItemResponse>(`${environment.baseUrl}/items/queue`, request)
+        .post<ItemResponse>(`${environment.baseUrl}/items`, request)
         .toPromise();
 
-      let subscription = interval(3000).subscribe(() => this.response = ItemResponseDefault);
+      let subscription = interval(5000).subscribe(() => this.response = ItemResponseDefault);
       this.subscriptions.push(subscription);
 
       this.form.reset();

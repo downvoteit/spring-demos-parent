@@ -69,10 +69,14 @@ export class GetItemsComponent implements OnInit, OnDestroy {
   getItems() {
     const subscription = this.http
       .get<ItemRequest[]>(`${environment.baseUrl}/items`, {headers: AppHttpHeaders})
-      .subscribe(response => {
-        this.data = response;
-        this.loaded = true;
-      });
+      .subscribe(
+        response => {
+          this.data = response;
+          if (this.data.length > 0) {
+            this.loaded = true;
+          }
+        },
+        err => console.error(err));
 
     this.subscriptions.push(subscription);
   }

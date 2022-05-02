@@ -14,10 +14,10 @@ import javax.persistence.EntityManagerFactory;
 
 @Slf4j
 @Configuration
-public class SolaceConsumerConfig {
+public class ConsumerConfig {
   private final EntityManagerFactory factory;
 
-  public SolaceConsumerConfig(EntityManagerFactory factory) {
+  public ConsumerConfig(EntityManagerFactory factory) {
     this.factory = factory;
   }
 

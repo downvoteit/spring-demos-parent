@@ -20,19 +20,18 @@ public class ItemController {
     this.itemService = itemService;
   }
 
+  @PostMapping
+  public Mono<ItemResponseDto> createItem(@RequestBody ItemRequestDto itemRequestDto) {
+    return itemService.createItem(itemRequestDto);
+  }
+
   @GetMapping("/{name}")
   public Mono<ItemRequestDto> getItem(@PathVariable String name) {
-    return Mono.fromCallable(itemService::getItem);
+    return itemService.getItem(name);
   }
 
   @GetMapping
   public Flux<ItemRequestDto> getItems() {
     return Flux.fromStream(itemService.getItems());
-  }
-
-  @PostMapping("/{mode}")
-  public Mono<ItemResponseDto> createItem(
-      @PathVariable String mode, @RequestBody ItemRequestDto itemRequestDto) {
-    return itemService.createItem(mode, itemRequestDto);
   }
 }

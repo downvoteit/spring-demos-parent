@@ -25,9 +25,9 @@ public class ProducerService {
     this.queueSecondary = queueSecondary;
   }
 
-  public Integer sendQueue(ItemRequestDto itemRequestDto) throws JCSMPException {
-    BytesMessage messagePrimary = sendBytes(itemRequestDto);
-    BytesMessage messageSecondary = sendBytes(itemRequestDto);
+  public Integer createItem(ItemRequestDto itemRequestDto) throws JCSMPException {
+    BytesMessage messagePrimary = prepareCreateItemMessage(itemRequestDto);
+    BytesMessage messageSecondary = prepareCreateItemMessage(itemRequestDto);
 
     var producerPrimary = session.getMessageProducer(new ProducerHandler());
     var producerSecondary = session.getMessageProducer(new ProducerHandler());
@@ -42,7 +42,7 @@ public class ProducerService {
     return itemRequestDto.getId();
   }
 
-  private BytesMessage sendBytes(ItemRequestDto itemRequestDto) {
+  private BytesMessage prepareCreateItemMessage(ItemRequestDto itemRequestDto) {
     var message = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
     message.setDeliveryMode(DeliveryMode.PERSISTENT);
 

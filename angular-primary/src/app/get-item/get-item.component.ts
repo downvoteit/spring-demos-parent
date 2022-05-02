@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AppHttpHeaders, CategoriesEnum, CategoryArray, ItemRequest, ItemRequestDefault} from "../app.types";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
@@ -21,7 +21,7 @@ import {ValidationService} from "../validation/validation.service";
       </div>
       <div>
         <label for="name">Name</label>
-        <input minlength="3" maxlength="20" required
+        <input minlength="3" maxlength="20" required #name
                formControlName="name"
                id="name"
                placeholder="Please enter a Name"
@@ -46,14 +46,16 @@ import {ValidationService} from "../validation/validation.service";
                type="text">
       </div>
       <div class="plain-btn">
-        <button [disabled]="form.invalid" type="submit">Find</button>
+        <button [disabled]="form.invalid" type="submit" #submit>Find</button>
       </div>
       <div *ngIf="response" id="response">{{ response }}</div>
     </form>
   `,
   styles: []
 })
-export class GetItemComponent implements OnInit, OnDestroy {
+export class GetItemComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('name') name!: ElementRef;
+  @ViewChild('submit') submit!: ElementRef;
   subscriptions: Subscription[] = [];
   categories: CategoriesEnum[] = CategoryArray;
   response: string = '';
@@ -78,22 +80,38 @@ export class GetItemComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
-  onSubmit() {
-    this.getItems();
+  ngAfterViewInit(): void {
+    this.name.nativeElement.focus();
   }
 
-  getItems() {
-    const name = this.form.get('name')?.value;
+  onSubmit() {
+    this.getItem().then();
+  }
 
-    this.response = 'Searching...';
+  async getItem() {
+    try {
+      const name = this.form.get('name')?.value;
 
-    const subscription = this.http
-      .get<ItemRequest>(`${environment.baseUrl}/items/${name}`, {headers: AppHttpHeaders})
-      .subscribe(response => {
-        this.form.patchValue(response);
-        this.response = 'Found';
-      });
+      this.response = `Searching for an item with name ${name}...`;
+      this.name.nativeElement.disabled = true;
+      this.submit.nativeElement.disabled = true;
 
-    this.subscriptions.push(subscription);
+      const response = <ItemRequest>await this.http
+        .get<ItemRequest>(`${environment.baseUrl}/items/${name}`, {headers: AppHttpHeaders})
+        .toPromise();
+
+      this.response = 'Search successful, item is found';
+
+      this.form.reset();
+      this.form.patchValue(response);
+    } catch (e) {
+      this.response = 'Search unsuccessful, item cannot be found';
+
+      console.error(e);
+    } finally {
+      this.name.nativeElement.disabled = false;
+      this.submit.nativeElement.disabled = false;
+      this.name.nativeElement.focus();
+    }
   }
 }
