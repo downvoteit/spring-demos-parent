@@ -127,7 +127,7 @@ mvn clean install
 
 - Create an item on Server 7005 and add stats on Server 8003
 - On duplicate error on Server 7005 send a compensatory operation to Server 8003
-- Features: Async (non-blocking), Eventual consistency, Durable, Exclusive, Byte transfer (Google Protobuf)
+- Features: Sync/blocking (JCSMP), Eventual consistency, Durable, Exclusive, Byte transfer (Google Protobuf)
 
 ```
                     ---- create item ----> Server 7005 --- duplicate error ----
@@ -143,7 +143,7 @@ mvn clean install
 
 - Send a name to Server 7005
 - Receive an item from Server 7004
-- Features: Async (non-blocking), Non-durable (Direct), Exclusive, Byte transfer (Google Protobuf)
+- Features: Sync/blocking (JCSMP), Non-durable (Direct), Exclusive, Byte transfer (Google Protobuf)
 
 ```
                     ------- send name ------> (request)
