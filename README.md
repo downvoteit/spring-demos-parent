@@ -114,11 +114,11 @@ mvn clean install
                  Solace Primary      Solace Backup      Solace Monitoring
 
 
-                  Server 20001/2                         Server 9001
-                    SonarQube                              WebFlux  
-                        |                                     |     
-                   Server 20003                          Server 9002
-                    PostgreSQL                            PostgreSQL
+    Server 20001/2          Server 9001
+      SonarQube               WebFlux  
+          |                      |     
+     Server 20003           Server 9002
+      PostgreSQL             PostgreSQL
 ```
 
 ## Feature schema
