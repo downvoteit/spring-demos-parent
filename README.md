@@ -155,7 +155,7 @@ mvn clean install
 
 - Cached at both upstream Server 7003 with Caffeine and using Redis at Server 7004
 - Caffeine caches a parametrized Mono from the WebFlux
-- Redis caches a byte array from the protocol buffer
+- Redis caches a byte array returned from the Solace broker in the form of a protocol buffer
 
 ```
     Server 7003 <---- M2M WebClient HTTP GET request ----> Server 7005 
