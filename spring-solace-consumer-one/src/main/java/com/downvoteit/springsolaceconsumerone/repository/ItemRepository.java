@@ -1,8 +1,8 @@
 package com.downvoteit.springsolaceconsumerone.repository;
 
 import com.downvoteit.springgpb.ItemRequest;
-import com.downvoteit.springsolaceconsumerone.entity.Category;
-import com.downvoteit.springsolaceconsumerone.entity.Item;
+import com.downvoteit.springhibernatecommon.entity.primary.Category;
+import com.downvoteit.springhibernatecommon.entity.primary.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 

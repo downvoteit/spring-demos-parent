@@ -1,9 +1,10 @@
-package com.downvoteit.springsolaceconsumertwo.entity;
+package com.downvoteit.springhibernatecommon.entity.primary;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,16 +13,19 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "items_by_categories")
-@Table(name = "items_by_categories")
+@Entity(name = "items")
+@Table(name = "items")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class ItemsByCategory {
+public class Item {
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "items_by_categories_id_seq")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "items_id_seq")
   @GenericGenerator(
-      name = "items_by_categories_id_seq",
+      name = "items_id_seq",
       strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator")
   private Integer id;
+
+  @OneToOne
+  private Category category;
 
   @Column(name = "name")
   private String name;

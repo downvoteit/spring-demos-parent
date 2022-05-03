@@ -51,6 +51,15 @@
       <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
+
+    <dependency>
+      <groupId>com.downvoteit</groupId>
+      <artifactId>spring-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.downvoteit</groupId>
+      <artifactId>spring-hibernate-common</artifactId>
+    </dependency>
   </dependencies>
 
   <build>

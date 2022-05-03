@@ -1,4 +1,4 @@
-package com.downvoteit.springsolaceconsumerone.entity;
+package com.downvoteit.springhibernatecommon.entity.primary;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

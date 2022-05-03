@@ -1,7 +1,8 @@
 package com.downvoteit.springhibernate.service;
 
-import com.downvoteit.springhibernate.entity.Item;
-import com.downvoteit.springhibernate.entity.StoreItem;
+import com.downvoteit.springhibernatecommon.entity.primary.Category;
+import com.downvoteit.springhibernatecommon.entity.primary.Item;
+import com.downvoteit.springhibernatecommon.entity.primary.StoreItem;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -37,12 +38,18 @@ public class ItemService {
       manager.clear();
 
       var random = SecureRandom.getInstanceStrong();
+      var category = manager.getReference(Category.class, 1);
 
       LongStream.rangeClosed(1, 6000)
           .forEach(
               index -> {
                 var item =
-                    new Item(null, "A" + index, random.nextInt() * 10, random.nextDouble() * 100);
+                    Item.builder()
+                        .category(category)
+                        .name("A" + index)
+                        .amount(random.nextInt() * 10)
+                        .price(random.nextDouble() * 100)
+                        .build();
 
                 manager.persist(item);
 

@@ -56,6 +56,7 @@
     <module>spring-webflux</module>
     <module>spring-common</module>
     <module>spring-redis-common</module>
+    <module>spring-hibernate-common</module>
   </modules>
 
   <dependencyManagement>
@@ -103,7 +104,6 @@
         <artifactId>spring-boot-starter-data-redis</artifactId>
         <version>${spring.boot.version}</version>
       </dependency>
-
       <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
@@ -169,6 +169,11 @@
       <dependency>
         <groupId>com.downvoteit</groupId>
         <artifactId>spring-redis-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.downvoteit</groupId>
+        <artifactId>spring-hibernate-common</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>

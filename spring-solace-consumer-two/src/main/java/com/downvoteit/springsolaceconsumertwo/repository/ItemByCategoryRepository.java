@@ -1,7 +1,7 @@
 package com.downvoteit.springsolaceconsumertwo.repository;
 
 import com.downvoteit.springgpb.ItemRequest;
-import com.downvoteit.springsolaceconsumertwo.entity.ItemsByCategory;
+import com.downvoteit.springhibernatecommon.entity.secondary.ItemsCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +23,7 @@ public class ItemByCategoryRepository {
     try {
       transaction.begin();
 
-      var itemByCategory = manager.getReference(ItemsByCategory.class, data.getCategoryId());
+      var itemByCategory = manager.getReference(ItemsCategory.class, data.getCategoryId());
 
       var newAmount = 0;
       var newPrice = 0D;

@@ -1,4 +1,4 @@
-package com.downvoteit.springhibernate.entity;
+package com.downvoteit.springhibernatecommon.entity.primary;
 
 import lombok.*;
 
