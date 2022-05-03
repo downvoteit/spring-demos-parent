@@ -18,6 +18,11 @@ public class CacheConfig {
   private String itemCacheNameProperty;
 
   @Bean
+  public String itemCacheName() {
+    return itemCacheNameProperty;
+  }
+
+  @Bean
   public RedisCacheConfiguration cacheConfiguration() {
     return RedisCacheConfiguration.defaultCacheConfig()
         .entryTtl(Duration.ofMinutes(60))
@@ -25,11 +30,6 @@ public class CacheConfig {
         .serializeValuesWith(
             RedisSerializationContext.SerializationPair.fromSerializer(
                 new GenericJackson2JsonRedisSerializer()));
-  }
-
-  @Bean
-  public String itemCacheName() {
-    return itemCacheNameProperty;
   }
 
   @Bean
