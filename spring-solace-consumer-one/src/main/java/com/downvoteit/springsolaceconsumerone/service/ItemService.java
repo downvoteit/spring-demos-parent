@@ -1,6 +1,7 @@
 package com.downvoteit.springsolaceconsumerone.service;
 
 import com.downvoteit.springgpb.ItemRequest;
+import com.downvoteit.springsolaceconsumerone.exception.CheckedPersistenceException;
 import com.downvoteit.springsolaceconsumerone.repository.ItemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,7 +16,7 @@ public class ItemService {
     this.repository = repository;
   }
 
-  public void saveItem(ItemRequest data) {
+  public void saveItem(ItemRequest data) throws CheckedPersistenceException {
     repository.saveItem(data);
   }
 

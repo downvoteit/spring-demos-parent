@@ -1,8 +1,8 @@
 package com.downvoteit.springsolaceconsumerone.config;
 
 import com.downvoteit.springgpb.ItemRequest;
-import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.downvoteit.springsolacecommon.listener.ConsumerListener;
+import com.downvoteit.springsolaceconsumerone.exception.CheckedPersistenceException;
 import com.downvoteit.springsolaceconsumerone.service.ItemService;
 import com.downvoteit.springsolaceconsumerone.service.ProducerService;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
-import javax.persistence.PersistenceException;
 
 @Slf4j
 @Configuration
@@ -33,7 +31,6 @@ public class ConsumerConfig {
       @Qualifier("flow-properties-primary") ConsumerFlowProperties flowProperties,
       EndpointProperties endpointProperties)
       throws JCSMPException {
-    var producerSecondaryRollback = session.getMessageProducer(new ProducerHandler() {});
 
     var listener =
         new ConsumerListener() {
@@ -54,10 +51,10 @@ public class ConsumerConfig {
               itemService.saveItem(data);
 
               log.info("Consumed: \n{}", data);
-            } catch (PersistenceException e) {
+            } catch (CheckedPersistenceException e) {
               log.warn("Consumed a PersistenceException: {}", e.getMessage());
 
-              producerService.createItemRollbackMessage(data, producerSecondaryRollback);
+              producerService.createItemRollbackMessage(data);
             }
           }
         };

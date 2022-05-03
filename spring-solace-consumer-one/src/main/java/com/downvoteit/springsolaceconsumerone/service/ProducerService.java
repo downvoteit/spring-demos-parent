@@ -1,8 +1,9 @@
 package com.downvoteit.springsolaceconsumerone.service;
 
-import com.downvoteit.springgpb.ItemRequest;
-import com.solacesystems.jcsmp.*;
 import com.downvoteit.springcommon.dto.ItemCorKeyDto;
+import com.downvoteit.springgpb.ItemRequest;
+import com.downvoteit.springsolacecommon.handler.ProducerHandler;
+import com.solacesystems.jcsmp.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
@@ -12,15 +13,19 @@ import org.springframework.stereotype.Service;
 @Service
 @Profile("default")
 public class ProducerService {
+  private final JCSMPSession session;
   private final Queue queueSecondaryRollback;
 
-  public ProducerService(@Qualifier("queue-secondary-rollback") Queue queueSecondaryRollback) {
+  public ProducerService(
+      JCSMPSession session, @Qualifier("queue-secondary-rollback") Queue queueSecondaryRollback) {
+    this.session = session;
     this.queueSecondaryRollback = queueSecondaryRollback;
   }
 
-  public void createItemRollbackMessage(
-      ItemRequest data, XMLMessageProducer producerSecondaryRollback) {
+  public void createItemRollbackMessage(ItemRequest data) {
     try {
+      var producerSecondaryRollback = session.getMessageProducer(new ProducerHandler() {});
+
       var rollbackMessage = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
       rollbackMessage.setDeliveryMode(DeliveryMode.PERSISTENT);
 

@@ -3,6 +3,7 @@ package com.downvoteit.springsolaceconsumerone.repository;
 import com.downvoteit.springgpb.ItemRequest;
 import com.downvoteit.springhibernatecommon.entity.primary.Category;
 import com.downvoteit.springhibernatecommon.entity.primary.Item;
+import com.downvoteit.springsolaceconsumerone.exception.CheckedPersistenceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -17,27 +18,31 @@ public class ItemRepository {
     this.factory = factory;
   }
 
-  public void saveItem(ItemRequest data) {
-    var manager = factory.createEntityManager();
-    var transaction = manager.getTransaction();
-
+  public void saveItem(ItemRequest data) throws CheckedPersistenceException {
     try {
-      transaction.begin();
+      var manager = factory.createEntityManager();
+      var transaction = manager.getTransaction();
 
-      var category = manager.find(Category.class, data.getCategoryId());
+      try {
+        transaction.begin();
 
-      var item =
-          Item.builder()
-              .category(category)
-              .name(data.getName())
-              .amount(data.getAmount())
-              .price(data.getPrice())
-              .build();
+        var category = manager.find(Category.class, data.getCategoryId());
 
-      manager.persist(item);
-    } finally {
-      transaction.commit();
-      manager.close();
+        var item =
+            Item.builder()
+                .category(category)
+                .name(data.getName())
+                .amount(data.getAmount())
+                .price(data.getPrice())
+                .build();
+
+        manager.persist(item);
+      } finally {
+        transaction.commit();
+        manager.close();
+      }
+    } catch (RuntimeException e) {
+      throw new CheckedPersistenceException("Cannot save an item", e);
     }
   }
 
