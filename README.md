@@ -90,7 +90,7 @@ mvn clean install
                  Angular
                     |
                Server 7003 
-            WebFlux + WebClient
+       WebFlux + WebClient + Caffeine
                     |
                Server 7004                                  Server 8002 
             WebFlux + Solace                                  Angular
