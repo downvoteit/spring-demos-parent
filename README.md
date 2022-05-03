@@ -166,7 +166,7 @@ mvn clean install
 
 ![get item ui](documents/get_item_ui.png)
 
-## Google protobuf schema
+## Google protobuf schema for Solace event messaging
 
 ```protobuf
 syntax = "proto3";
@@ -194,7 +194,7 @@ message ItemNameRequest {
 }
 ```
 
-## Hibernate entities
+## Hibernate entities for persistence
 
 ### Primary
 
@@ -298,7 +298,7 @@ public class ItemsCategory {
 }
 ```
 
-## DTO POJOs
+## DTO POJOs for Machine-to-Machine WebClient HTTP communication
 
 ```java
 @Data
@@ -333,7 +333,7 @@ public class ItemResponseDto {
 }
 ```
 
-## Flyway versioned schema
+## Flyway versioned schema for centralized SQL management
 
 ```postgresql
 -- V1__Create_categories_items_table.sql
