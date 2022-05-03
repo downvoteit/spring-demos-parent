@@ -1,8 +1,8 @@
 package com.downvoteit.springwebflux.controller;
 
 import com.downvoteit.springwebflux.service.ItemService;
-import dto.ItemRequestDto;
-import dto.ItemResponseDto;
+import com.downvoteit.springcommon.dto.ItemRequestDto;
+import com.downvoteit.springcommon.dto.ItemResponseDto;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;

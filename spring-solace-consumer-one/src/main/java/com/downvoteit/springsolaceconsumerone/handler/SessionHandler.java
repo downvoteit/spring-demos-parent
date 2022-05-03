@@ -3,11 +3,13 @@ package com.downvoteit.springsolaceconsumerone.handler;
 import com.solacesystems.jcsmp.FlowReceiver;
 import com.solacesystems.jcsmp.JCSMPSession;
 import com.solacesystems.jcsmp.XMLMessageConsumer;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 
 @Component
+@Profile("default")
 public class SessionHandler {
   private final JCSMPSession session;
   private final FlowReceiver receiver;

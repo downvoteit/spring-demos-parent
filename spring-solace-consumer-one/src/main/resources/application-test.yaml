@@ -1,0 +1,28 @@
+spring:
+  main:
+    banner-mode: off
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+      - org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
+      - com.solace.spring.boot.autoconfigure.SolaceJmsAutoCloudConfiguration
+      - com.solace.spring.boot.autoconfigure.SolaceJmsAutoConfiguration
+      - com.solace.spring.boot.autoconfigure.SolaceJavaAutoCloudConfiguration
+      - com.solace.spring.boot.autoconfigure.SolaceJavaAutoConfiguration
+  redis:
+    database: 1
+    host: localhost
+    port: 7006
+    username: default
+    password: redis
+    connect-timeout: 5000
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cache: TRACE
+    org.springframework.core.io.support: DEBUG
+    org.springframework.context.annotation: DEBUG

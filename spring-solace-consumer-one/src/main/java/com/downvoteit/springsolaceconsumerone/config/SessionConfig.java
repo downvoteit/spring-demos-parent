@@ -8,9 +8,11 @@ import com.solacesystems.jcsmp.JCSMPSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Slf4j
 @Configuration
+@Profile("default")
 public class SessionConfig {
   @Bean
   public JCSMPSession createSession(JCSMPProperties properties) throws JCSMPException {

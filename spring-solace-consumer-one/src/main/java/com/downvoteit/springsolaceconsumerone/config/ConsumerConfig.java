@@ -3,8 +3,7 @@ package com.downvoteit.springsolaceconsumerone.config;
 import com.downvoteit.springgpb.ItemRequest;
 import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.downvoteit.springsolacecommon.listener.ConsumerListener;
-import com.downvoteit.springsolaceconsumerone.entity.Category;
-import com.downvoteit.springsolaceconsumerone.entity.Item;
+import com.downvoteit.springsolaceconsumerone.service.ItemService;
 import com.downvoteit.springsolaceconsumerone.service.ProducerService;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.solacesystems.jcsmp.*;
@@ -12,19 +11,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
 
 @Slf4j
 @Configuration
+@Profile("default")
 public class ConsumerConfig {
-  private final EntityManagerFactory factory;
-  private final ProducerService service;
+  private final ProducerService producerService;
+  private final ItemService itemService;
 
-  public ConsumerConfig(EntityManagerFactory factory, ProducerService service) {
-    this.factory = factory;
-    this.service = service;
+  public ConsumerConfig(ProducerService producerService, ItemService itemService) {
+    this.producerService = producerService;
+    this.itemService = itemService;
   }
 
   @Bean
@@ -51,13 +51,13 @@ public class ConsumerConfig {
             if (data == null) throw new IllegalStateException("Cannot process message data");
 
             try {
-              saveItem(data);
+              itemService.saveItem(data);
 
               log.info("Consumed: \n{}", data);
             } catch (PersistenceException e) {
               log.warn("Consumed a PersistenceException: {}", e.getMessage());
 
-              service.createItemRollbackMessage(data, producerSecondaryRollback);
+              producerService.createItemRollbackMessage(data, producerSecondaryRollback);
             }
           }
         };
@@ -67,29 +67,5 @@ public class ConsumerConfig {
     receiver.start();
 
     return receiver;
-  }
-
-  private void saveItem(ItemRequest data) {
-    var manager = factory.createEntityManager();
-    var transaction = manager.getTransaction();
-
-    try {
-      transaction.begin();
-
-      var category = manager.find(Category.class, data.getCategoryId());
-
-      var item =
-          Item.builder()
-              .category(category)
-              .name(data.getName())
-              .amount(data.getAmount())
-              .price(data.getPrice())
-              .build();
-
-      manager.persist(item);
-    } finally {
-      transaction.commit();
-      manager.close();
-    }
   }
 }

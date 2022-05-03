@@ -2,7 +2,7 @@ package com.downvoteit.springsolaceconsumertwo.config;
 
 import com.downvoteit.springgpb.ItemRequest;
 import com.downvoteit.springsolacecommon.listener.ConsumerListener;
-import com.downvoteit.springsolaceconsumertwo.entity.ItemsByCategory;
+import com.downvoteit.springsolaceconsumertwo.service.ItemByCategoryService;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.solacesystems.jcsmp.*;
 import lombok.extern.slf4j.Slf4j;
@@ -10,15 +10,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.EntityManagerFactory;
-
 @Slf4j
 @Configuration
 public class ConsumerConfig {
-  private final EntityManagerFactory factory;
+  private final ItemByCategoryService service;
 
-  public ConsumerConfig(EntityManagerFactory factory) {
-    this.factory = factory;
+  public ConsumerConfig(ItemByCategoryService service) {
+    this.service = service;
   }
 
   @Bean
@@ -36,7 +34,7 @@ public class ConsumerConfig {
             try {
               var data = ItemRequest.parseFrom(bytes);
 
-              updateCategory(data, false);
+              service.updateCategory(data, false);
 
               log.info("Consumed: \n{}", data);
             } catch (InvalidProtocolBufferException e) {
@@ -67,7 +65,7 @@ public class ConsumerConfig {
             try {
               var data = ItemRequest.parseFrom(bytes);
 
-              updateCategory(data, true);
+              service.updateCategory(data, true);
 
               log.info("Consumed rollback: \n{}", data);
             } catch (InvalidProtocolBufferException e) {
@@ -81,34 +79,5 @@ public class ConsumerConfig {
     receiver.start();
 
     return receiver;
-  }
-
-  private void updateCategory(ItemRequest data, boolean rollback) {
-    var manager = factory.createEntityManager();
-    var transaction = manager.getTransaction();
-
-    try {
-      transaction.begin();
-
-      var itemByCategory = manager.getReference(ItemsByCategory.class, data.getCategoryId());
-
-      var newAmount = 0;
-      var newPrice = 0D;
-      if (rollback) {
-        newAmount = itemByCategory.getAmount() - data.getAmount();
-        newPrice = itemByCategory.getPrice() - data.getPrice();
-      } else {
-        newAmount = itemByCategory.getAmount() + data.getAmount();
-        newPrice = itemByCategory.getPrice() + data.getPrice();
-      }
-
-      itemByCategory.setAmount(newAmount);
-      itemByCategory.setPrice(newPrice);
-
-      manager.merge(itemByCategory);
-    } finally {
-      transaction.commit();
-      manager.close();
-    }
   }
 }

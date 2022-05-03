@@ -1,0 +1,27 @@
+version: '3.9'
+
+networks:
+  spring_demos:
+    name: spring_demos_redis
+    driver: bridge
+
+volumes:
+  redis:
+    name: spring_demos_redis_cache
+  redis_data:
+    name: spring_demos_redis_cache_data
+
+services:
+  cache:
+    container_name: spring_demos_redis
+    hostname: cache
+    image: redis:7.0.0
+    restart: unless-stopped
+    ports:
+      - 7006:6379
+    command: redis-server --save 120 1 --port 6379 --bind 0.0.0.0 --loglevel warning --requirepass redis
+    volumes:
+      - redis:/var/lib/redis
+      - redis_data:/data
+    networks:
+      - spring_demos

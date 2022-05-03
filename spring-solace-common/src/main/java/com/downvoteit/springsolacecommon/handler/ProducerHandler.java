@@ -2,7 +2,7 @@ package com.downvoteit.springsolacecommon.handler;
 
 import com.solacesystems.jcsmp.JCSMPException;
 import com.solacesystems.jcsmp.JCSMPStreamingPublishCorrelatingEventHandler;
-import dto.ItemCorKeyDto;
+import com.downvoteit.springcommon.dto.ItemCorKeyDto;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

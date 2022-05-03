@@ -1,32 +1,32 @@
 package com.downvoteit.springsolaceconsumerone.config;
 
 import com.downvoteit.springgpb.ItemNameRequest;
-import com.downvoteit.springgpb.ItemRequest;
 import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.downvoteit.springsolacecommon.listener.ConsumerListener;
-import com.downvoteit.springsolaceconsumerone.entity.Item;
+import com.downvoteit.springsolaceconsumerone.service.ItemService;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.solacesystems.jcsmp.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 
 @Slf4j
 @Configuration
+@Profile("default")
 public class ReplyConfig {
-  private final EntityManagerFactory factory;
   private final JCSMPSession session;
+  private final ItemService service;
 
   @Value("${topics.reply:get/item}")
   private String topicGetItem;
 
-  public ReplyConfig(EntityManagerFactory factory, JCSMPSession session) {
-    this.factory = factory;
+  public ReplyConfig(JCSMPSession session, ItemService service) {
     this.session = session;
+    this.service = service;
   }
 
   @Bean
@@ -52,7 +52,7 @@ public class ReplyConfig {
 
                     log.info("Reply data preparation for: {}", name);
 
-                    var item = getItem(name);
+                    var item = service.getItem(name);
 
                     var reply = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
                     reply.setData(item.toByteArray());
@@ -75,30 +75,5 @@ public class ReplyConfig {
     consumer.start();
 
     return consumer;
-  }
-
-  private ItemRequest getItem(String name) {
-    var manager = factory.createEntityManager();
-    var transaction = manager.getTransaction();
-
-    try {
-      transaction.begin();
-
-      var data =
-          manager
-              .createQuery("select t from items t where t.name = :name", Item.class)
-              .setParameter("name", name)
-              .getSingleResult();
-
-      return ItemRequest.newBuilder()
-          .setCategoryId(data.getCategory().getId())
-          .setName(data.getName())
-          .setAmount(data.getAmount())
-          .setPrice(data.getPrice())
-          .build();
-    } finally {
-      transaction.rollback();
-      manager.close();
-    }
   }
 }

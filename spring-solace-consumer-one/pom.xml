@@ -60,6 +60,10 @@
       <groupId>com.downvoteit</groupId>
       <artifactId>spring-solace-common</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.downvoteit</groupId>
+      <artifactId>spring-redis-common</artifactId>
+    </dependency>
   </dependencies>
 
   <build>

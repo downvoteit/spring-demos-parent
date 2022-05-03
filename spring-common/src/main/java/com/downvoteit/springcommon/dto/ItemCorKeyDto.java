@@ -1,4 +1,4 @@
-package dto;
+package com.downvoteit.springcommon.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

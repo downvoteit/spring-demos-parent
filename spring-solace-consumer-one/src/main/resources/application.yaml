@@ -2,6 +2,7 @@ spring:
   main:
     banner-mode: off
   datasource:
+    name: pg
     url: jdbc:postgresql://localhost:7007/postgres
     username: postgres
     password: postgres
@@ -36,6 +37,13 @@ spring:
     user: postgres
     password: postgres
     schemas: postgres
+  redis:
+    database: 1
+    host: localhost
+    port: 7006
+    username: default
+    password: redis
+    connect-timeout: 5000
 
 server:
   port: 7005
@@ -52,3 +60,5 @@ logging:
     root: INFO
     com.solacesystems.jcsmp.*: ERROR
     org.hibernate.*: ERROR
+    org.springframework.cache: TRACE
+

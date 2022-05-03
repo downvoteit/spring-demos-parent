@@ -31,6 +31,8 @@
     <h2.version>1.4.200</h2.version>
     <flyway.version>8.0.5</flyway.version>
     <lombok.version>1.18.22</lombok.version>
+    <reactor.extra.version>3.4.8</reactor.extra.version>
+    <caffeine.version>3.1.0</caffeine.version>
     <protobuf.version>3.20.0</protobuf.version>
     <protobuf.maven.version>0.6.1</protobuf.maven.version>
     <os.maven.version>1.7.0</os.maven.version>
@@ -53,6 +55,7 @@
     <module>spring-beanlifecycle</module>
     <module>spring-webflux</module>
     <module>spring-common</module>
+    <module>spring-redis-common</module>
   </modules>
 
   <dependencyManagement>
@@ -90,6 +93,16 @@
         <version>${spring.boot.version}</version>
         <optional>true</optional>
       </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-cache</artifactId>
+        <version>${spring.boot.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+        <version>${spring.boot.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>org.postgresql</groupId>
@@ -114,6 +127,21 @@
         <version>${lombok.version}</version>
         <optional>true</optional>
       </dependency>
+      <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-java</artifactId>
+        <version>${protobuf.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.projectreactor.addons</groupId>
+        <artifactId>reactor-extra</artifactId>
+        <version>${reactor.extra.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.ben-manes.caffeine</groupId>
+        <artifactId>caffeine</artifactId>
+        <version>${caffeine.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>com.solace.spring.boot</groupId>
@@ -121,12 +149,6 @@
         <version>${solace-spring-boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>com.google.protobuf</groupId>
-        <artifactId>protobuf-java</artifactId>
-        <version>${protobuf.version}</version>
       </dependency>
 
       <dependency>
@@ -142,6 +164,11 @@
       <dependency>
         <groupId>com.downvoteit</groupId>
         <artifactId>spring-solace-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.downvoteit</groupId>
+        <artifactId>spring-redis-common</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>

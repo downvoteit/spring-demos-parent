@@ -5,7 +5,7 @@ import com.downvoteit.springgpb.ItemRequest;
 import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.solacesystems.jcsmp.*;
-import dto.ItemRequestDto;
+import com.downvoteit.springcommon.dto.ItemRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
