@@ -155,6 +155,255 @@ mvn clean install
 
 ![get item ui](documents/get_item_ui.png)
 
+## Google protobuf schema
+
+```protobuf
+syntax = "proto3";
+
+package com.downvoteit.springgpb;
+
+option java_multiple_files = true;
+option java_package = "com.downvoteit.springgpb";
+
+message ItemRequest {
+  int32 id = 1;
+  int32 categoryId = 2;
+  string name = 3;
+  int32 amount = 4;
+  double price = 5;
+}
+
+message ItemResponse {
+  int32 id = 1;
+  string message = 2;
+}
+
+message ItemNameRequest {
+  string name = 1;
+}
+```
+
+## Hibernate entities
+
+### Primary
+
+```java
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity(name = "categories")
+@Table(name = "categories")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Category {
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categories_id_seq")
+  @GenericGenerator(
+      name = "categories_id_seq",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator")
+  private Integer id;
+
+  @Column(name = "name")
+  private String name;
+}
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity(name = "items")
+@Table(name = "items")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Item {
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "items_id_seq")
+  @GenericGenerator(
+      name = "items_id_seq",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator")
+  private Integer id;
+
+  @OneToOne
+  private Category category;
+
+  @Column(name = "name")
+  private String name;
+
+  @Column(name = "amount")
+  private Integer amount;
+
+  @Column(name = "price")
+  private Double price;
+}
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Entity(name = "store_items")
+public class StoreItem extends Item {
+  @Column(name = "store_name")
+  private String storeName;
+}
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Entity(name = "warehouse_items")
+public class WarehouseItem extends Item {
+  @Column(name = "warehouse_name")
+  private String warehouseName;
+}
+```
+
+#### Secondary
+
+```java
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity(name = "items_categories")
+@Table(name = "items_categories")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class ItemsCategory {
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "items_categories_id_seq")
+  @GenericGenerator(
+      name = "items_categories_id_seq",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator")
+  private Integer id;
+
+  @Column(name = "name")
+  private String name;
+
+  @Column(name = "amount")
+  private Integer amount;
+
+  @Column(name = "price")
+  private Double price;
+}
+```
+
+## DTO POJOs
+
+```java
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ItemCorKeyDto {
+  private Integer id;
+  private volatile boolean acked;
+  private volatile boolean published;
+}
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ItemRequestDto {
+  private Integer id;
+  private Integer categoryId;
+  private String name;
+  private Integer amount;
+  private Double price;
+}
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ItemResponseDto {
+  private Integer id;
+  private String message;
+}
+```
+
+## Flyway versioned schema
+
+```postgresql
+-- V1__Create_categories_items_table.sql
+create table categories
+(
+    id   serial not null
+        constraint categories_pkey primary key,
+    name varchar(255),
+    unique (name)
+);
+
+create table items
+(
+    id          serial not null
+        constraint items_pkey primary key,
+    category_id int,
+    name        varchar(255),
+    amount      integer default 0,
+    price       double precision,
+    unique (name),
+    constraint items_fkey
+        foreign key (category_id)
+            references categories (id)
+);
+
+alter table categories
+    owner to postgres;
+alter table items
+    owner to postgres;
+
+-- V2__Insert_categories_table.sql
+insert into categories (id, name)
+values (1, 'Primary'),
+       (2, 'Secondary'),
+       (3, 'Tertiary');
+
+alter sequence categories_id_seq restart with 4;
+
+-- V3__Insert_items_table.sql
+insert into items (id, category_id, name, amount, price)
+values (nextval('items_id_seq'), 1, 'Test primary', 1, 10.0),
+       (nextval('items_id_seq'), 2, 'Test secondary', 2, 20.0),
+       (nextval('items_id_seq'), 3, 'Test tertiary', 3, 30.0);
+
+-- V4__Create_store_items_table.sql
+create table store_items
+(
+    id          serial not null
+        constraint store_items_pkey primary key,
+    category_id int,
+    name        varchar(255),
+    store_name  varchar(255),
+    amount      integer default 0,
+    price       double precision,
+    unique (name),
+    constraint store_items_fkey
+        foreign key (category_id)
+            references categories (id)
+);
+
+create table warehouse_items
+(
+    id             serial not null
+        constraint warehouse_items_pkey primary key,
+    category_id    int,
+    name           varchar(255),
+    warehouse_name varchar(255),
+    amount         integer default 0,
+    price          double precision,
+    unique (name),
+    constraint warehouse_items_fkey
+        foreign key (category_id)
+            references categories (id)
+);
+
+alter table store_items
+    owner to postgres;
+alter table warehouse_items
+    owner to postgres;
+```
+
 ## Notes
 
 ### Solace
