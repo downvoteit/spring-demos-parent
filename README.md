@@ -154,3 +154,21 @@ mvn clean install
 ```
 
 ![get item ui](documents/get_item_ui.png)
+
+## Notes
+
+### Solace
+
+- JMS API is for direct, non-durable (not guaranteed) messaging 
+- JCSMP API is for mostly sync/blocking, low-latency messaging that can be affected by GC intervals
+- Java RTO API is for async/non-blocking, extremely low-latency messaging that relies on C wrapper and manual memory management
+
+### WebFlux
+
+- WebFlux cannot be cached with Redis without stopping the event-loop (blocking & rescheduling)
+- WebFlux can be cached with Caffeine but using a deprecated CacheMono types
+
+### Hibernate
+
+- Entities involved into batch operations must use `@GeneratedValue(GenerationType.SEQUENCE, generator=...)`
+- During a batch operation calling `flush()` and `clear()` on an EntityManager will clear the PersistenceContext to avoid an OOM 

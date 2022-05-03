@@ -55,7 +55,6 @@ public class ItemService {
 
                 if (index > 0 && index % batchSize == 0) {
                   manager.flush();
-                  // Clear PersistentContext (first level cache) to avoid getting an OOM
                   manager.clear();
                 }
               });
@@ -74,7 +73,6 @@ public class ItemService {
 
     try {
       LongStream.rangeClosed(1, 200).forEach(index -> manager.persist(new StoreItem("B" + index)));
-
       LongStream.rangeClosed(1, 300).forEach(index -> manager.persist(new StoreItem("C" + index)));
     } finally {
       transaction.commit();
