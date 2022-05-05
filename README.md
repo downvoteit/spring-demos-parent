@@ -180,9 +180,9 @@ mvn clean install
             (reply) <--------- get items ------------           
 ```
 
-![get items ui](documents/get_items_ui.png)
+- Not cached at either Server 7003 (Caffeine) or Server 7004 (Redis)
 
-- Not cached
+![get items ui](documents/get_items_ui.png)
 
 ## Google protobuf schema for Solace event messaging
 
