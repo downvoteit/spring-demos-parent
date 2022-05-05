@@ -174,6 +174,16 @@ mvn clean install
 
 ![get items ui](documents/get_items_ui.png)
 
+```
+                    ------- send page & limit ------> (request)
+                    |                               |
+    Server 7004 --- |                               | --- Server 7005
+                    |                               |
+            (reply) <--------- get items ------------           
+```
+
+- Not cached
+
 ## Google protobuf schema for Solace event messaging
 
 ```protobuf
