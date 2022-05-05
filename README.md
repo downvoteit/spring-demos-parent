@@ -446,6 +446,7 @@ alter table warehouse_items
 - JMS API is for direct, durable/non-durable (not guaranteed) messaging 
 - JCSMP API is for mostly sync/blocking, low-latency messaging that can be affected by GC intervals
 - Java RTO API is for async/non-blocking, extremely low-latency messaging that relies on C wrapper and manual memory management
+- Front-/client-facing get data requests must use non-durable queues
 
 ### WebFlux
 
