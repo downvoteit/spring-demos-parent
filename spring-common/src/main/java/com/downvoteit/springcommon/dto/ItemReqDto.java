@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemResponseDto {
+public class ItemReqDto {
   private Integer id;
-  private String message;
+  private Integer categoryId;
+  private String name;
+  private Integer amount;
+  private Double price;
 }

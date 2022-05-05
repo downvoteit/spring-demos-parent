@@ -1,8 +1,9 @@
 package com.downvoteit.springsolaceconsumertwo.config;
 
-import com.downvoteit.springgpb.ItemRequest;
+import com.downvoteit.springgpb.ItemReqProto;
+import com.downvoteit.springsolacecommon.config.SharedProps;
 import com.downvoteit.springsolacecommon.listener.ConsumerListener;
-import com.downvoteit.springsolaceconsumertwo.service.ItemByCategoryService;
+import com.downvoteit.springsolaceconsumertwo.service.ItemCategoryService;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.solacesystems.jcsmp.*;
 import lombok.extern.slf4j.Slf4j;
@@ -13,16 +14,16 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 public class ConsumerConfig {
-  private final ItemByCategoryService service;
+  private final ItemCategoryService service;
 
-  public ConsumerConfig(ItemByCategoryService service) {
+  public ConsumerConfig(ItemCategoryService service) {
     this.service = service;
   }
 
-  @Bean
+  @Bean(SharedProps.CreateItemOlap.Commit.RECEIVER)
   public FlowReceiver createFlowReceiver(
       JCSMPSession session,
-      @Qualifier("flow-properties-secondary") ConsumerFlowProperties flowProperties,
+      @Qualifier(SharedProps.CreateItemOlap.Commit.FLOW_PROPS) ConsumerFlowProperties flowProperties,
       EndpointProperties endpointProperties)
       throws JCSMPException {
     var listener =
@@ -32,7 +33,7 @@ public class ConsumerConfig {
             var bytes = message.getData();
 
             try {
-              var data = ItemRequest.parseFrom(bytes);
+              var data = ItemReqProto.parseFrom(bytes);
 
               service.updateCategory(data, false);
 
@@ -50,10 +51,11 @@ public class ConsumerConfig {
     return receiver;
   }
 
-  @Bean
+  @Bean(SharedProps.CreateItemOlap.Rollback.RECEIVER)
   public FlowReceiver createFlowReceiverRollback(
       JCSMPSession session,
-      @Qualifier("flow-properties-secondary-rollback") ConsumerFlowProperties flowProperties,
+      @Qualifier(SharedProps.CreateItemOlap.Rollback.FLOW_PROPS)
+          ConsumerFlowProperties flowProperties,
       EndpointProperties endpointProperties)
       throws JCSMPException {
     var listener =
@@ -63,7 +65,7 @@ public class ConsumerConfig {
             var bytes = message.getData();
 
             try {
-              var data = ItemRequest.parseFrom(bytes);
+              var data = ItemReqProto.parseFrom(bytes);
 
               service.updateCategory(data, true);
 

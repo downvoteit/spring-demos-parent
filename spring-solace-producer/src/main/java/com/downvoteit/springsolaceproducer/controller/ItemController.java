@@ -1,12 +1,13 @@
 package com.downvoteit.springsolaceproducer.controller;
 
+import com.downvoteit.springcommon.dto.ItemReqDto;
+import com.downvoteit.springcommon.dto.ItemResDto;
 import com.downvoteit.springsolaceproducer.service.ItemService;
 import com.solacesystems.jcsmp.JCSMPException;
-import com.downvoteit.springcommon.dto.ItemRequestDto;
-import com.downvoteit.springcommon.dto.ItemResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -23,11 +24,13 @@ public class ItemController {
   }
 
   @PostMapping
-  public Mono<ItemResponseDto> createItem(@RequestBody ItemRequestDto itemRequestDto) {
+  public Mono<ItemResDto> createItem(@RequestBody ItemReqDto dto) {
+    log.info("Producing for createItem()");
+
     return Mono.defer(
         () -> {
           try {
-            var itemMessage = itemService.createItem(itemRequestDto);
+            var itemMessage = itemService.createItem(dto);
 
             return Mono.just(itemMessage);
           } catch (JCSMPException e) {
@@ -36,8 +39,10 @@ public class ItemController {
         });
   }
 
-  @GetMapping("/{name}")
-  public Mono<ItemRequestDto> getItem(@PathVariable String name) {
+  @GetMapping("/row/{name}")
+  public Mono<ItemReqDto> getItem(@PathVariable String name) {
+    log.info("Producing for getItem()");
+
     return Mono.defer(
         () -> {
           try {
@@ -46,6 +51,24 @@ public class ItemController {
             return Mono.just(itemMessage);
           } catch (JCSMPException e) {
             return Mono.error(e);
+          }
+        });
+  }
+
+  @GetMapping("/paged")
+  public Flux<ItemReqDto> getItems(
+      @RequestParam(defaultValue = "0") Integer page,
+      @RequestParam(defaultValue = "10") Integer limit) {
+    log.info("Producing for getItems()");
+
+    return Flux.defer(
+        () -> {
+          try {
+            var itemMessage = itemService.getItems(page, limit);
+
+            return Flux.fromIterable(itemMessage.getList());
+          } catch (JCSMPException e) {
+            return Flux.error(e);
           }
         });
   }

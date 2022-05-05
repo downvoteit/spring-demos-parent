@@ -1,6 +1,7 @@
 package com.downvoteit.springsolaceconsumerone.service;
 
-import com.downvoteit.springgpb.ItemRequest;
+import com.downvoteit.springgpb.CategoryProto;
+import com.downvoteit.springgpb.ItemReqProto;
 import com.downvoteit.springsolaceconsumerone.repository.ItemRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -47,9 +48,9 @@ class ItemServiceTest {
     String name = "test";
 
     var item =
-        ItemRequest.newBuilder()
+        ItemReqProto.newBuilder()
             .setId(1)
-            .setCategoryId(1)
+            .setCategoryId(CategoryProto.PRIMARY)
             .setName(name)
             .setAmount(1)
             .setPrice(1D)
@@ -67,11 +68,11 @@ class ItemServiceTest {
     assertThat(getItemCache(name)).isEqualTo(item);
   }
 
-  private ItemRequest getItemCache(String name) {
+  private ItemReqProto getItemCache(String name) {
     Cache.ValueWrapper wrapper = cache.get(name);
 
     if (wrapper == null) return null;
 
-    return (ItemRequest) wrapper.get();
+    return (ItemReqProto) wrapper.get();
   }
 }

@@ -17,15 +17,23 @@ public class CacheConfig {
   @Value("${cache.item.name:redis-item-cache}")
   private String itemCacheNameProperty;
 
+  @Value("${cache.items.name:redis-items-cache}")
+  private String itemsCacheNameProperty;
+
   @Bean
   public String itemCacheName() {
     return itemCacheNameProperty;
   }
 
   @Bean
+  public String itemsCacheName() {
+    return itemsCacheNameProperty;
+  }
+
+  @Bean
   public RedisCacheConfiguration cacheConfiguration() {
     return RedisCacheConfiguration.defaultCacheConfig()
-        .entryTtl(Duration.ofMinutes(60))
+        .entryTtl(Duration.ofMinutes(10))
         .disableCachingNullValues()
         .serializeValuesWith(
             RedisSerializationContext.SerializationPair.fromSerializer(
@@ -34,10 +42,14 @@ public class CacheConfig {
 
   @Bean
   public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer(
-      String itemCacheName) {
+      String itemCacheName, String itemsCacheName) {
     return builder ->
-        builder.withCacheConfiguration(
-            itemCacheName,
-            RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)));
+        builder
+            .withCacheConfiguration(
+                itemCacheName,
+                RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)))
+            .withCacheConfiguration(
+                itemsCacheName,
+                RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)));
   }
 }

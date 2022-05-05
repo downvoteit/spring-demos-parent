@@ -1,7 +1,8 @@
 package com.downvoteit.springsolaceconsumerone.service;
 
 import com.downvoteit.springcommon.dto.ItemCorKeyDto;
-import com.downvoteit.springgpb.ItemRequest;
+import com.downvoteit.springgpb.ItemReqProto;
+import com.downvoteit.springsolacecommon.config.SharedProps;
 import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.solacesystems.jcsmp.*;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +18,12 @@ public class ProducerService {
   private final Queue queueSecondaryRollback;
 
   public ProducerService(
-      JCSMPSession session, @Qualifier("queue-secondary-rollback") Queue queueSecondaryRollback) {
+      JCSMPSession session, @Qualifier(SharedProps.CreateItemOlap.Rollback.QUEUE) Queue queueSecondaryRollback) {
     this.session = session;
     this.queueSecondaryRollback = queueSecondaryRollback;
   }
 
-  public void createItemRollbackMessage(ItemRequest data) {
+  public void createItemRollbackMessage(ItemReqProto data) {
     try {
       var producerSecondaryRollback = session.getMessageProducer(new ProducerHandler() {});
 

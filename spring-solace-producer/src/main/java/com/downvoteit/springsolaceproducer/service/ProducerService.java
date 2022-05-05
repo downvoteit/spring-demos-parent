@@ -1,10 +1,12 @@
 package com.downvoteit.springsolaceproducer.service;
 
-import com.downvoteit.springgpb.ItemRequest;
+import com.downvoteit.springcommon.dto.ItemCorKeyDto;
+import com.downvoteit.springcommon.dto.ItemReqDto;
+import com.downvoteit.springgpb.CategoryProto;
+import com.downvoteit.springgpb.ItemReqProto;
+import com.downvoteit.springsolacecommon.config.SharedProps;
 import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.solacesystems.jcsmp.*;
-import com.downvoteit.springcommon.dto.ItemCorKeyDto;
-import com.downvoteit.springcommon.dto.ItemRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -13,46 +15,46 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProducerService {
   private final JCSMPSession session;
-  private final Queue queuePrimary;
-  private final Queue queueSecondary;
+  private final Queue createItemOltpQueue;
+  private final Queue createItemOlapQueue;
 
   public ProducerService(
       JCSMPSession session,
-      @Qualifier("queue-primary") Queue queuePrimary,
-      @Qualifier("queue-secondary") Queue queueSecondary) {
+      @Qualifier(SharedProps.CreateItemOltp.Commit.QUEUE) Queue createItemOltpQueue,
+      @Qualifier(SharedProps.CreateItemOlap.Commit.QUEUE) Queue createItemOlapQueue) {
     this.session = session;
-    this.queuePrimary = queuePrimary;
-    this.queueSecondary = queueSecondary;
+    this.createItemOltpQueue = createItemOltpQueue;
+    this.createItemOlapQueue = createItemOlapQueue;
   }
 
-  public Integer createItem(ItemRequestDto itemRequestDto) throws JCSMPException {
-    BytesMessage messagePrimary = prepareCreateItemMessage(itemRequestDto);
-    BytesMessage messageSecondary = prepareCreateItemMessage(itemRequestDto);
+  public Integer createItem(ItemReqDto dto) throws JCSMPException {
+    BytesMessage messagePrimary = prepareCreateItemMessage(dto);
+    BytesMessage messageSecondary = prepareCreateItemMessage(dto);
 
     var producerPrimary = session.getMessageProducer(new ProducerHandler());
     var producerSecondary = session.getMessageProducer(new ProducerHandler());
     try {
-      producerPrimary.send(messagePrimary, queuePrimary);
-      producerSecondary.send(messageSecondary, queueSecondary);
+      producerPrimary.send(messagePrimary, createItemOltpQueue);
+      producerSecondary.send(messageSecondary, createItemOlapQueue);
     } finally {
       producerPrimary.close();
       producerSecondary.close();
     }
 
-    return itemRequestDto.getId();
+    return dto.getId();
   }
 
-  private BytesMessage prepareCreateItemMessage(ItemRequestDto itemRequestDto) {
+  private BytesMessage prepareCreateItemMessage(ItemReqDto dto) {
     var message = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
     message.setDeliveryMode(DeliveryMode.PERSISTENT);
 
     var data =
-        ItemRequest.newBuilder()
-            .setId(itemRequestDto.getId())
-            .setCategoryId(itemRequestDto.getCategoryId())
-            .setName(itemRequestDto.getName())
-            .setAmount(itemRequestDto.getAmount())
-            .setPrice(itemRequestDto.getPrice())
+        ItemReqProto.newBuilder()
+            .setId(dto.getId())
+            .setCategoryId(CategoryProto.forNumber(dto.getCategoryId()))
+            .setName(dto.getName())
+            .setAmount(dto.getAmount())
+            .setPrice(dto.getPrice())
             .build();
 
     var corKeyDto = ItemCorKeyDto.builder().id(data.getId()).build();

@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AppHttpHeaders, CategoriesEnum, CategoryArray, ItemRequest, ItemRequestDefault} from "../app.types";
+import {AppHttpHeaders, CategoryEnum, CategoryArray, ItemReq, ItemRequestDefault} from "../app.types";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {Subscription} from "rxjs";
@@ -21,7 +21,7 @@ import {ValidationService} from "../validation/validation.service";
       </div>
       <div>
         <label for="name">Name</label>
-        <input minlength="3" maxlength="20" required #name
+        <input minlength="3" maxlength="30" required #name
                formControlName="name"
                id="name"
                placeholder="Please enter a Name"
@@ -57,7 +57,7 @@ export class GetItemComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('name') name!: ElementRef;
   @ViewChild('submit') submit!: ElementRef;
   subscriptions: Subscription[] = [];
-  categories: CategoriesEnum[] = CategoryArray;
+  categories: CategoryEnum[] = CategoryArray;
   response: string = '';
   form: FormGroup;
 
@@ -89,15 +89,16 @@ export class GetItemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async getItem() {
-    try {
-      const name = this.form.get('name')?.value;
+    const itemName = this.form.get('name')?.value;
 
-      this.response = `Searching for an item with name ${name}...`;
+    try {
+      this.response = `Searching for an item with name ${itemName}...`;
       this.name.nativeElement.disabled = true;
       this.submit.nativeElement.disabled = true;
 
-      const response = <ItemRequest>await this.http
-        .get<ItemRequest>(`${environment.baseUrl}/items/${name}`, {headers: AppHttpHeaders})
+      const url = `${environment.baseUrl}/items/row/${itemName}`;
+      const response = <ItemReq>await this.http
+        .get<ItemReq>(url, {headers: AppHttpHeaders})
         .toPromise();
 
       this.response = 'Search successful, item is found';
@@ -106,6 +107,7 @@ export class GetItemComponent implements OnInit, OnDestroy, AfterViewInit {
       this.form.patchValue(response);
     } catch (e) {
       this.response = 'Search unsuccessful, item cannot be found';
+      this.form.patchValue({id: 0, categoryId: 1, name: itemName, amount: 0, price: 0.0});
 
       console.error(e);
     } finally {

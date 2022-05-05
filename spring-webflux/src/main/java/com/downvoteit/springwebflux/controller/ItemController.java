@@ -1,8 +1,8 @@
 package com.downvoteit.springwebflux.controller;
 
+import com.downvoteit.springcommon.dto.ItemReqDto;
+import com.downvoteit.springcommon.dto.ItemResDto;
 import com.downvoteit.springwebflux.service.ItemService;
-import com.downvoteit.springcommon.dto.ItemRequestDto;
-import com.downvoteit.springcommon.dto.ItemResponseDto;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -21,17 +21,19 @@ public class ItemController {
   }
 
   @PostMapping
-  public Mono<ItemResponseDto> createItem(@RequestBody ItemRequestDto itemRequestDto) {
-    return itemService.createItem(itemRequestDto);
+  public Mono<ItemResDto> createItem(@RequestBody ItemReqDto dto) {
+    return itemService.createItem(dto);
   }
 
-  @GetMapping("/{name}")
-  public Mono<ItemRequestDto> getItem(@PathVariable String name) {
+  @GetMapping("/row/{name}")
+  public Mono<ItemReqDto> getItem(@PathVariable String name) {
     return itemService.getItem(name);
   }
 
-  @GetMapping
-  public Flux<ItemRequestDto> getItems() {
-    return Flux.fromStream(itemService.getItems());
+  @GetMapping("/paged")
+  public Flux<ItemReqDto> getItems(
+      @RequestParam(defaultValue = "0") Integer page,
+      @RequestParam(defaultValue = "10") Integer limit) {
+    return itemService.getItems(page, limit);
   }
 }

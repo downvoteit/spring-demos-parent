@@ -24,7 +24,7 @@ services:
     image: postgres:14.2
     restart: unless-stopped
     ports:
-      - 20003:5432
+      - 7010:5432
     environment:
       POSTGRES_USER: sonar
       POSTGRES_PASSWORD: sonar
@@ -47,8 +47,8 @@ services:
     image: sonarqube:lts-community
     restart: unless-stopped
     ports:
-      - 20001:9000
-      - 20002:9092
+      - 7008:9000
+      - 7009:9092
     environment:
       TZ: Asia/Tashkent
       ES_JAVA_HOME: /opt/java/openjdk

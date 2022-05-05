@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidationService} from "../validation/validation.service";
 import {HttpClient} from "@angular/common/http";
 import {interval, Subscription} from "rxjs";
-import {CategoriesEnum, CategoryArray, ItemRequest, ItemRequestDefault, ItemResponse, ItemResponseDefault} from "../app.types";
+import {CategoryEnum, CategoryArray, ItemReq, ItemRequestDefault, ItemRes, ItemResponseDefault} from "../app.types";
 import {environment} from "../../environments/environment";
 
 @Component({
@@ -21,7 +21,7 @@ import {environment} from "../../environments/environment";
       </div>
       <div>
         <label for="name">Name</label>
-        <input minlength="3" maxlength="20" required #name
+        <input minlength="3" maxlength="30" required #name
                formControlName="name"
                id="name"
                placeholder="Name"
@@ -56,8 +56,8 @@ import {environment} from "../../environments/environment";
 export class CreateItemComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('name') name!: ElementRef;
   subscriptions: Subscription[] = [];
-  categories: CategoriesEnum[] = CategoryArray;
-  response: ItemResponse = ItemResponseDefault;
+  categories: CategoryEnum[] = CategoryArray;
+  response: ItemRes = ItemResponseDefault;
   form: FormGroup;
 
   constructor(private builder: FormBuilder, private http: HttpClient) {
@@ -87,10 +87,10 @@ export class CreateItemComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       this.form.disable();
 
-      const request: ItemRequest = this.form.value;
+      const request: ItemReq = this.form.value;
 
-      this.response = <ItemResponse>await this.http
-        .post<ItemResponse>(`${environment.baseUrl}/items`, request)
+      this.response = <ItemRes>await this.http
+        .post<ItemRes>(`${environment.baseUrl}/items`, request)
         .toPromise();
 
       let subscription = interval(5000).subscribe(() => this.response = ItemResponseDefault);

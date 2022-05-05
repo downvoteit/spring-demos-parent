@@ -44,8 +44,11 @@ solace:
   java:
     host: tcp://localhost:55555
     msg-vpn: default
+    client-name: consumer_two
     client-username: consumer_two
     client-password: consumer_two
+    api-properties:
+      session_name: consumer_two_session
 
 logging:
   level:

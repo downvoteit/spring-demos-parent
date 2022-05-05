@@ -80,7 +80,7 @@ mvn clean install
 
 #### Solace
 
-- Server 8080 HAProxy
+- Server 55555 HAProxy
 - Server 212 Solace Primary
 - Server 312 Solace Backup
 - Server 412 Solace Monitoring
@@ -105,7 +105,7 @@ mvn clean install
     Server 7006           Server 7007     |                 
        Redis               PostgreSQL     |
                                           |
-                                     Server 8080
+                                     Server 55555
                                        HAProxy
                                           |
                        -----------------------------------------
@@ -114,10 +114,10 @@ mvn clean install
                  Solace Primary      Solace Backup      Solace Monitoring
 
 
-    Server 20001/2          Server 9001
+     Server 7008/9          Server 9001
       SonarQube               WebFlux  
           |                      |     
-     Server 20003           Server 9002
+     Server 7010            Server 9002
       PostgreSQL             PostgreSQL
 ```
 
@@ -166,6 +166,14 @@ mvn clean install
 
 ![get item ui](documents/get_item_ui.png)
 
+### Get items
+
+- Send a page & limit to Server 7005
+- Receive an item from Server 7004
+- Features: Sync/blocking (JCSMP), Non-durable (Direct), Exclusive, Byte transfer (Google Protobuf)
+
+![get items ui](documents/get_items_ui.png)
+
 ## Google protobuf schema for Solace event messaging
 
 ```protobuf
@@ -176,21 +184,37 @@ package com.downvoteit.springgpb;
 option java_multiple_files = true;
 option java_package = "com.downvoteit.springgpb";
 
-message ItemRequest {
+enum CategoryProto {
+  UNDEFINED = 0;
+  PRIMARY = 1;
+  SECONDARY = 2;
+  TERTIARY = 3;
+}
+
+message ItemReqProto {
   int32 id = 1;
-  int32 categoryId = 2;
+  CategoryProto categoryId = 2;
   string name = 3;
   int32 amount = 4;
   double price = 5;
 }
 
-message ItemResponse {
+message ItemResProto {
   int32 id = 1;
   string message = 2;
 }
 
-message ItemNameRequest {
+message ItemReqNameProto {
   string name = 1;
+}
+
+message ItemReqsProto {
+  repeated ItemReqProto items = 1;
+}
+
+message ItemReqsPageProto {
+  int32 page = 1;
+  int32 limit = 2;
 }
 ```
 
@@ -315,7 +339,7 @@ public class ItemCorKeyDto {
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemRequestDto {
+public class ItemReqDto {
   private Integer id;
   private Integer categoryId;
   private String name;
@@ -327,7 +351,7 @@ public class ItemRequestDto {
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemResponseDto {
+public class ItemResDto {
   private Integer id;
   private String message;
 }
@@ -419,7 +443,7 @@ alter table warehouse_items
 
 ### Solace
 
-- JMS API is for direct, non-durable (not guaranteed) messaging 
+- JMS API is for direct, durable/non-durable (not guaranteed) messaging 
 - JCSMP API is for mostly sync/blocking, low-latency messaging that can be affected by GC intervals
 - Java RTO API is for async/non-blocking, extremely low-latency messaging that relies on C wrapper and manual memory management
 

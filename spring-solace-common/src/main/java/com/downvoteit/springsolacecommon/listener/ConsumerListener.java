@@ -1,6 +1,6 @@
 package com.downvoteit.springsolacecommon.listener;
 
-import com.downvoteit.springgpb.ItemRequest;
+import com.downvoteit.springgpb.ItemReqProto;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.solacesystems.jcsmp.BytesMessage;
 import com.solacesystems.jcsmp.BytesXMLMessage;
@@ -25,7 +25,7 @@ public class ConsumerListener implements XMLMessageListener {
     var bytes = message.getData();
 
     try {
-      var data = ItemRequest.parseFrom(bytes);
+      var data = ItemReqProto.parseFrom(bytes);
 
       log.info("Consumed: \n{}", data);
     } catch (InvalidProtocolBufferException e) {

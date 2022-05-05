@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CommonConfig {
-  protected static ConsumerFlowProperties createGenericFlowProperties(Queue queue) {
+  protected static ConsumerFlowProperties createFlowProps(Queue queue) {
     var properties = new ConsumerFlowProperties();
     properties.setEndpoint(queue);
     properties.setAckMode(JCSMPProperties.SUPPORTED_MESSAGE_ACK_CLIENT);
@@ -18,11 +18,11 @@ public class CommonConfig {
   }
 
   @Bean
-  public EndpointProperties createEndpointProperties() {
+  public EndpointProperties createEndpointProps() {
     var properties = new EndpointProperties();
     properties.setPermission(EndpointProperties.PERMISSION_DELETE);
     properties.setAccessType(EndpointProperties.ACCESSTYPE_EXCLUSIVE);
-    properties.setQuota(100);
+    properties.setQuota(10);
 
     return properties;
   }

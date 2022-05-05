@@ -1,7 +1,8 @@
 package com.downvoteit.springsolaceconsumerone.service;
 
-import com.downvoteit.springgpb.ItemRequest;
-import com.downvoteit.springsolaceconsumerone.exception.CheckedPersistenceException;
+import com.downvoteit.springgpb.ItemReqProto;
+import com.downvoteit.springgpb.ItemReqsProto;
+import com.downvoteit.springsolacecommon.exception.CheckedPersistenceException;
 import com.downvoteit.springsolaceconsumerone.repository.ItemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -16,12 +17,16 @@ public class ItemService {
     this.repository = repository;
   }
 
-  public void saveItem(ItemRequest data) throws CheckedPersistenceException {
+  public void saveItem(ItemReqProto data) throws CheckedPersistenceException {
     repository.saveItem(data);
   }
 
   @Cacheable(value = "redis-item-cache")
-  public ItemRequest getItem(String name) {
+  public ItemReqProto getItem(String name) {
     return repository.getItem(name);
+  }
+
+  public ItemReqsProto getItems(Integer page, Integer limit) {
+    return repository.getItems(page, limit);
   }
 }

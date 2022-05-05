@@ -5,14 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemRequestDto {
-  private Integer id;
-  private Integer categoryId;
-  private String name;
-  private Integer amount;
-  private Double price;
+public class ItemReqsDto {
+  private List<ItemReqDto> list;
 }

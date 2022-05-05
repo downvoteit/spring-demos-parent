@@ -1,8 +1,9 @@
 package com.downvoteit.springsolaceproducer.service;
 
+import com.downvoteit.springcommon.dto.ItemReqDto;
+import com.downvoteit.springcommon.dto.ItemReqsDto;
+import com.downvoteit.springcommon.dto.ItemResDto;
 import com.solacesystems.jcsmp.JCSMPException;
-import com.downvoteit.springcommon.dto.ItemRequestDto;
-import com.downvoteit.springcommon.dto.ItemResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +18,17 @@ public class ItemService {
     this.replyService = replyService;
   }
 
-  public ItemResponseDto createItem(ItemRequestDto itemRequestDto) throws JCSMPException {
-    return ItemResponseDto.builder()
-        .id(producerService.createItem(itemRequestDto))
-        .message(
-            String.format(
-                "Creation successful, created an item with name %s", itemRequestDto.getName()))
-        .build();
+  public ItemResDto createItem(ItemReqDto dto) throws JCSMPException {
+    var message = String.format("Creation successful, created an item with name %s", dto.getName());
+
+    return ItemResDto.builder().id(producerService.createItem(dto)).message(message).build();
   }
 
-  public ItemRequestDto getItem(String name) throws JCSMPException {
+  public ItemReqDto getItem(String name) throws JCSMPException {
     return replyService.getItem(name);
+  }
+
+  public ItemReqsDto getItems(Integer page, Integer limit) throws JCSMPException {
+    return replyService.getItems(page, limit);
   }
 }

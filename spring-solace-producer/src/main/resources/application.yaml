@@ -9,8 +9,11 @@ solace:
   java:
     host: tcp://localhost:55555
     msg-vpn: default
+    client-name: producer
     client-username: producer
     client-password: producer
+    api-properties:
+      session_name: producer_session
 
 logging:
   level:
