@@ -1,5 +1,6 @@
 package com.downvoteit.springsolacecommon.config;
 
+// Proof-of-concept
 public class SharedProps {
   private SharedProps() {}
 
