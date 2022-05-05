@@ -172,8 +172,6 @@ mvn clean install
 - Receive an item from Server 7004
 - Features: Sync/blocking (JCSMP), Non-durable (Direct), Exclusive, Byte transfer (Google Protobuf)
 
-![get items ui](documents/get_items_ui.png)
-
 ```
                     ------- send page & limit ------> (request)
                     |                               |
@@ -181,6 +179,8 @@ mvn clean install
                     |                               |
             (reply) <--------- get items ------------           
 ```
+
+![get items ui](documents/get_items_ui.png)
 
 - Not cached
 
