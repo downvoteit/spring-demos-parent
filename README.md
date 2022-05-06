@@ -457,6 +457,11 @@ alter table warehouse_items
 - JCSMP API is for mostly sync/blocking, low-latency messaging that can be affected by GC intervals
 - Java RTO API is for async/non-blocking, extremely low-latency messaging that relies on C wrapper and manual memory management
 - Front-/client-facing get data requests must use non-durable queues
+- Queues are generally recommended for durable messaging
+- Topics can be configured for non-durable messaging
+- Topic subscriptions allow for complex filtering at the level of the broker
+- An exclusive queue allows receiving messages in Active-Standby/backup fashion
+- A non-exclusive queue allows receiving message in round-robin/competing fashion
 
 ### WebFlux
 

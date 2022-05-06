@@ -8,7 +8,7 @@ import {environment} from "../../environments/environment";
   selector: 'app-get-items',
   template: `
     <div class="plain-tbl">
-      <div>
+      <div id="items">
         <h2>Browse all items</h2>
       </div>
       <div>
