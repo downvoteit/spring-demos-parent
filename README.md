@@ -148,6 +148,10 @@ mvn clean install
 
 ![create item ui](documents/create_item_ui.png)
 
+### Update item
+
+- TODO
+
 ### Get item
 
 - Send a name to Server 7005
