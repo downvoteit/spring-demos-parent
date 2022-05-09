@@ -68,6 +68,10 @@ mvn clean install
 
 ### Tertiary 
 
+#### Nginx
+
+- Server 7001 Nginx
+
 #### Hibernate
 
 - Server 9001 WebFlux
@@ -75,8 +79,8 @@ mvn clean install
 
 #### SonarQube
 
-- Server 20001/2 SonarQube
-- Server 20003 PostgreSQL
+- Server 7008/9 SonarQube
+- Server 7010 PostgreSQL
 
 #### Solace
 
@@ -85,13 +89,18 @@ mvn clean install
 - Server 312 Solace Backup
 - Server 412 Solace Monitoring
 
-```
-               Server 7002 
-                 Angular
-                    |
-               Server 7003 
-       WebFlux + WebClient + Caffeine
-                    |
+```     
+                                     Server 7001
+                                        Nginx
+                                          |
+                    ----------------------------------------------
+                    |                                            |
+               Server 7002                                       |
+                 Angular                                         |
+                    |                                            |
+               Server 7003                                       |
+       WebFlux + WebClient + Caffeine                            |
+                    |                                            |
                Server 7004                                  Server 8002 
             WebFlux + Solace                                  Angular
                     |                                            |
@@ -146,11 +155,11 @@ mvn clean install
 - Features: Sync/blocking (JCSMP), Direct (Non-durable), Exclusive, Byte transfer (Google Protobuf)
 
 ```
-                    ------- send name ------> (request)
-                    |                       |
-    Server 7004 --- |                       | --- Server 7005
-                    |                       |
-            (reply) <------- get item -------           
+                    -------------- send category id & name --------------> (request)
+                    |                                                    |
+    Server 7004 --- |                                                    | --- Server 7005
+                    |                                                    |
+            (reply) <-------------------- get item -----------------------           
 ```
 
 - Cached at both upstream Server 7003 with Caffeine and using Redis at Server 7004
@@ -183,6 +192,18 @@ mvn clean install
 - Not cached at either Server 7003 (Caffeine) or Server 7004 (Redis)
 
 ![get items ui](documents/get_items_ui.png)
+
+### Delete item
+
+- TODO
+
+![get items ui](documents/get_items_ui.png)
+
+### Get items category
+
+- TODO
+
+![get items_category ui](documents/get_items_category_ui.png)
 
 ## Notes
 

@@ -9,6 +9,7 @@ import {Component} from '@angular/core';
       </div>
       <div class="plain-nav">
         <button routerLink="/browse">Browse</button>
+        <button routerLink="/ledger">Ledger</button>
       </div>
       <div>
         <router-outlet></router-outlet>
@@ -18,5 +19,5 @@ import {Component} from '@angular/core';
   styles: []
 })
 export class AppComponent {
-  message = `Welcome to Server ${window.location.port}`
+  message = `Welcome to Server ${window.location.port} - Secondary / Analytics (OLAP)`
 }

@@ -1,0 +1,27 @@
+version: '3.9'
+
+networks:
+  spring_demos:
+    name: spring_demos_nginx
+    driver: bridge
+
+volumes:
+  nginx:
+    name: spring_demos_nginx
+
+services:
+  proxy:
+    container_name: spring_demos_nginx
+    image: nginx:1.20
+    restart: unless-stopped
+    ports:
+      - 80:80
+    environment:
+      - NGINX_PORT=80
+      - NGINX_PORT=80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:rw
+      - ./domains:/etc/nginx/domains
+      - ./logs:/var/log/nginx
+    networks:
+      - spring_demos

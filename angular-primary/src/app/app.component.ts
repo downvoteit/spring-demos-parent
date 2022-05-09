@@ -8,9 +8,10 @@ import {Component} from '@angular/core';
         <h1>{{ message }}</h1>
       </div>
       <div class="plain-nav">
+        <button routerLink="/browse">Browse / delete</button>
         <button routerLink="/add">Add</button>
-        <button routerLink="/find">Find</button>
-        <button routerLink="/browse">Browse</button>
+        <button routerLink="/find">Find / edit</button>
+        <button routerLink="/analytics">Analytics</button>
       </div>
       <div>
         <router-outlet></router-outlet>
@@ -20,5 +21,5 @@ import {Component} from '@angular/core';
   styles: []
 })
 export class AppComponent {
-  message = `Welcome to Server ${window.location.port}`
+  message = `Welcome to Server ${window.location.port} - Primary / Ledger (OLTP)`
 }

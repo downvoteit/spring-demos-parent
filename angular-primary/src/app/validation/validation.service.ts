@@ -36,4 +36,15 @@ export class ValidationService {
       return {};
     }
   }
+
+  static validateDecimalAndGteZero(control: AbstractControl): { [key: string]: any } {
+    const pattern = /[^(0-9.)]+/i;
+    if (pattern.test(control.value)) {
+      return {notNumeric: true};
+    } else if (Number(control.value) <= 0) {
+      return {notGte: true};
+    } else {
+      return {};
+    }
+  }
 }

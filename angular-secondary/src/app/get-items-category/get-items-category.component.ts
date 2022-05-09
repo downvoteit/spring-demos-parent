@@ -27,8 +27,8 @@ import {ItemReqsPage} from "../../../../angular-primary/src/app/app.types";
             <tr *ngFor="let item of responseGet; let i = index">
               <td class="plain-tbl-center">{{ (i + 1) + request.page }}</td>
               <td>{{ item.name }}</td>
-              <td class="plain-tbl-right">{{ item.amount }}</td>
-              <td class="plain-tbl-right">{{ item.price }}</td>
+              <td class="plain-tbl-right">{{ item.amount  }}</td>
+              <td class="plain-tbl-right">{{ item.price | number: '1.2-2' }}</td>
             </tr>
           </ng-container>
           <ng-template #noData>

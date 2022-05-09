@@ -66,7 +66,7 @@ export class CreateItemComponent implements OnInit, OnDestroy, AfterViewInit {
       categoryId: [{value: '', disabled: false}, [Validators.required]],
       name: [{value: '', disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNameAlphaNumeric])]],
       amount: [{value: '', disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNumericAndGteZero])]],
-      price: [{value: '', disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNumericAndGteZero])]],
+      price: [{value: '', disabled: false}, [Validators.compose([Validators.required, ValidationService.validateDecimalAndGteZero])]],
     });
 
     this.form.patchValue(ItemRequestDefault);

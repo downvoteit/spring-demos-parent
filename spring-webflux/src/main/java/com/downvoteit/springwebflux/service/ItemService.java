@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.cache.CacheMono;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -70,24 +71,25 @@ public class ItemService {
   public Mono<ItemReqDto> getItem(ItemFilterDto filter) {
     log.info("Routing getItem");
 
-    //    var mono =
-    return webClient
-        .get()
-        .uri(
-            uriBuilder ->
-                uriBuilder
-                    .path("/items/row/{categoryId}/{name}")
-                    .build(filter.getCategoryId(), filter.getName()))
-        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-        .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-        .retrieve()
-        .bodyToMono(ItemReqDto.class);
-    //    return CacheMono.lookup(cache.asMap(), name)
-    //        .onCacheMissResume(
-    //            () ->
-    //                mono.cast(Object.class)
-    //                    .doOnNext(o -> ItemReqDto.builder().id(0).name("Dummy").build()))
-    //        .cast(ItemReqDto.class);
+    var mono =
+        webClient
+            .get()
+            .uri(
+                uriBuilder ->
+                    uriBuilder
+                        .path("/items/row/{categoryId}/{name}")
+                        .build(filter.getCategoryId(), filter.getName()))
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+            .retrieve()
+            .bodyToMono(ItemReqDto.class);
+
+    return CacheMono.lookup(cache.asMap(), filter)
+        .onCacheMissResume(
+            () ->
+                mono.cast(Object.class)
+                    .doOnNext(o -> ItemReqDto.builder().id(0).name("Dummy").build()))
+        .cast(ItemReqDto.class);
   }
 
   public Flux<ItemReqDto> getItems(Integer page, Integer limit) {

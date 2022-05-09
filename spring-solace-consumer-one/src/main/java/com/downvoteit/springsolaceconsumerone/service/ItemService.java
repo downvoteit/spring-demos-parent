@@ -5,6 +5,8 @@ import com.downvoteit.springgpb.ItemReqProto;
 import com.downvoteit.springgpb.ItemReqsProto;
 import com.downvoteit.springsolacecommon.exception.CheckedPersistenceException;
 import com.downvoteit.springsolaceconsumerone.repository.ItemRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +21,7 @@ public class ItemService {
     repository.saveItem(data);
   }
 
-  //  @Cacheable(value = "redis-item-cache")
+  @Cacheable(value = "redis-item-cache")
   public ItemReqProto getItem(ItemFilterDto dto) {
     return repository.getItem(dto);
   }
@@ -28,7 +30,7 @@ public class ItemService {
     return repository.getItems(page, limit);
   }
 
-  //  @CacheEvict(value = "redis-item-cache", allEntries = true)
+  @CacheEvict(value = "redis-item-cache", allEntries = true)
   public ItemReqProto deleteItem(Integer id) {
     return repository.deleteItem(id);
   }

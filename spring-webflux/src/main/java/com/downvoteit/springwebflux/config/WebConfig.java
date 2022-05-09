@@ -1,6 +1,5 @@
 package com.downvoteit.springwebflux.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -9,15 +8,11 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 @Configuration
 public class WebConfig {
-  @Value("${webclient.allowedOrigin:http://localhost:7002}")
-  private String allowedOrigin;
-
   @Bean
   public CorsWebFilter corsFilter() {
     var config = new CorsConfiguration();
 
-    config.setAllowCredentials(true);
-    config.addAllowedOrigin(allowedOrigin);
+    config.addAllowedOrigin("*");
     config.addAllowedHeader("*");
     config.addAllowedMethod("*");
 

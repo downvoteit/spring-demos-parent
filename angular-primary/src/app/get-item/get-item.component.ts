@@ -11,7 +11,7 @@ import {ValidationService} from "../validation/validation.service";
   template: `
     <form (ngSubmit)="onSubmit()" [formGroup]="form">
       <div>
-        <h2>Find an item</h2>
+        <h2>Find / edit an item</h2>
       </div>
       <div>
         <label for="categoryId">Category</label>
@@ -45,6 +45,10 @@ import {ValidationService} from "../validation/validation.service";
                placeholder="Price"
                type="text">
       </div>
+      <div>
+        <label for="edit">Edit</label>
+        <input id="edit" type="checkbox" (change)="onChange($event)"/>
+      </div>
       <div class="plain-btn">
         <button [disabled]="form.invalid" type="submit" #submit>Find</button>
       </div>
@@ -61,6 +65,7 @@ export class GetItemComponent implements OnInit, OnDestroy, AfterViewInit {
   categories: CategoryEnum[] = CategoryArray;
   response: string = '';
   form: FormGroup;
+  editEnabled = false;
 
   constructor(private builder: FormBuilder, private http: HttpClient) {
     this.form = this.builder.group({
@@ -85,7 +90,30 @@ export class GetItemComponent implements OnInit, OnDestroy, AfterViewInit {
     this.name.nativeElement.focus();
   }
 
+  onChange(event: any) {
+    if (event.target.checked) {
+      this.form.controls['amount'].enable();
+      this.form.controls['price'].enable();
+      this.name.nativeElement.placeholder = 'Name';
+      this.submit.nativeElement.disabled = false;
+      this.submit.nativeElement.innerHTML = 'Edit';
+      this.editEnabled = true;
+    } else {
+      this.form.controls['amount'].disable();
+      this.form.controls['price'].disable();
+      this.name.nativeElement.placeholder = 'Please enter a Name';
+      this.submit.nativeElement.disabled = true;
+      this.submit.nativeElement.innerHTML = 'Find';
+      this.editEnabled = false;
+    }
+  }
+
   onSubmit() {
+    if (this.editEnabled) {
+      console.log('unimplemented');
+
+      return;
+    }
     this.getItem().then();
   }
 
