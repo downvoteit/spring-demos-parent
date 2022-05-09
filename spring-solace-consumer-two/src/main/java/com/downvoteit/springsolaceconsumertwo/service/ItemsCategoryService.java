@@ -1,14 +1,14 @@
 package com.downvoteit.springsolaceconsumertwo.service;
 
 import com.downvoteit.springgpb.ItemReqProto;
-import com.downvoteit.springsolaceconsumertwo.repository.ItemCategoryRepository;
+import com.downvoteit.springsolaceconsumertwo.repository.ItemsCategoryRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ItemCategoryService {
-  private final ItemCategoryRepository repository;
+public class ItemsCategoryService {
+  private final ItemsCategoryRepository repository;
 
-  public ItemCategoryService(ItemCategoryRepository repository) {
+  public ItemsCategoryService(ItemsCategoryRepository repository) {
     this.repository = repository;
   }
 

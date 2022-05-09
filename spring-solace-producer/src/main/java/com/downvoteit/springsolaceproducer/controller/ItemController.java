@@ -1,7 +1,8 @@
 package com.downvoteit.springsolaceproducer.controller;
 
+import com.downvoteit.springcommon.dto.ItemFilterDto;
 import com.downvoteit.springcommon.dto.ItemReqDto;
-import com.downvoteit.springcommon.dto.ItemResDto;
+import com.downvoteit.springcommon.dto.ResDto;
 import com.downvoteit.springsolaceproducer.service.ItemService;
 import com.solacesystems.jcsmp.JCSMPException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,8 @@ public class ItemController {
   }
 
   @PostMapping
-  public Mono<ItemResDto> createItem(@RequestBody ItemReqDto dto) {
-    log.info("Producing for createItem()");
+  public Mono<ResDto> createItem(@RequestBody ItemReqDto dto) {
+    log.info("Producing createItem");
 
     return Mono.defer(
         () -> {
@@ -39,14 +40,16 @@ public class ItemController {
         });
   }
 
-  @GetMapping("/row/{name}")
-  public Mono<ItemReqDto> getItem(@PathVariable String name) {
-    log.info("Producing for getItem()");
+  @GetMapping("/row/{categoryId}/{name}")
+  public Mono<ItemReqDto> getItem(@PathVariable Integer categoryId, @PathVariable String name) {
+    log.info("Producing getItem");
+
+    var dto = ItemFilterDto.builder().categoryId(categoryId).name(name).build();
 
     return Mono.defer(
         () -> {
           try {
-            var itemMessage = itemService.getItem(name);
+            var itemMessage = itemService.getItem(dto);
 
             return Mono.just(itemMessage);
           } catch (JCSMPException e) {
@@ -59,7 +62,7 @@ public class ItemController {
   public Flux<ItemReqDto> getItems(
       @RequestParam(defaultValue = "0") Integer page,
       @RequestParam(defaultValue = "10") Integer limit) {
-    log.info("Producing for getItems()");
+    log.info("Producing getItems");
 
     return Flux.defer(
         () -> {
@@ -69,6 +72,22 @@ public class ItemController {
             return Flux.fromIterable(itemMessage.getList());
           } catch (JCSMPException e) {
             return Flux.error(e);
+          }
+        });
+  }
+
+  @DeleteMapping("/{id}")
+  public Mono<ResDto> deleteItem(@PathVariable Integer id) {
+    log.info("Producing deleteItem");
+
+    return Mono.defer(
+        () -> {
+          try {
+            var itemMessage = itemService.deleteItem(id);
+
+            return Mono.just(itemMessage);
+          } catch (JCSMPException e) {
+            return Mono.error(e);
           }
         });
   }

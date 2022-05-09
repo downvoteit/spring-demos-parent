@@ -22,7 +22,7 @@ public class CommonConfig {
     var properties = new EndpointProperties();
     properties.setPermission(EndpointProperties.PERMISSION_DELETE);
     properties.setAccessType(EndpointProperties.ACCESSTYPE_EXCLUSIVE);
-    properties.setQuota(10);
+    properties.setQuota(5);
 
     return properties;
   }

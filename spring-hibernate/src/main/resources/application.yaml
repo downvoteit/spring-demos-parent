@@ -1,6 +1,7 @@
 spring:
   main:
     banner-mode: off
+    log-startup-info: false
   datasource:
     url: jdbc:postgresql://localhost:9002/postgres
     username: postgres

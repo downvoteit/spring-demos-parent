@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidationService} from "../validation/validation.service";
 import {HttpClient} from "@angular/common/http";
 import {interval, Subscription} from "rxjs";
-import {CategoryEnum, CategoryArray, ItemReq, ItemRequestDefault, ItemRes, ItemResponseDefault} from "../app.types";
+import {CategoryArray, CategoryEnum, ItemReq, ItemRequestDefault, ItemResponseDefault, ResDto} from "../app.types";
 import {environment} from "../../environments/environment";
 
 @Component({
@@ -57,7 +57,7 @@ export class CreateItemComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('name') name!: ElementRef;
   subscriptions: Subscription[] = [];
   categories: CategoryEnum[] = CategoryArray;
-  response: ItemRes = ItemResponseDefault;
+  response: ResDto = ItemResponseDefault;
   form: FormGroup;
 
   constructor(private builder: FormBuilder, private http: HttpClient) {
@@ -89,8 +89,8 @@ export class CreateItemComponent implements OnInit, OnDestroy, AfterViewInit {
 
       const request: ItemReq = this.form.value;
 
-      this.response = <ItemRes>await this.http
-        .post<ItemRes>(`${environment.baseUrl}/items`, request)
+      this.response = <ResDto>await this.http
+        .post<ResDto>(`${environment.baseUrl}`, request)
         .toPromise();
 
       let subscription = interval(5000).subscribe(() => this.response = ItemResponseDefault);

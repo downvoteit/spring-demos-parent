@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AppHttpHeaders, CategoryEnum, CategoryArray, ItemReq, ItemRequestDefault} from "../app.types";
+import {AppHttpHeaders, CategoryArray, CategoryEnum, ItemReq, ItemRequestDefault} from "../app.types";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {Subscription} from "rxjs";
@@ -15,7 +15,7 @@ import {ValidationService} from "../validation/validation.service";
       </div>
       <div>
         <label for="categoryId">Category</label>
-        <select formControlName="categoryId" id="categoryId">
+        <select formControlName="categoryId" id="categoryId" #categoryId>
           <option *ngFor="let item of categories; let i = index" [value]="(i + 1)">{{ item }}</option>
         </select>
       </div>
@@ -54,6 +54,7 @@ import {ValidationService} from "../validation/validation.service";
   styles: []
 })
 export class GetItemComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('categoryId') categoryId!: ElementRef;
   @ViewChild('name') name!: ElementRef;
   @ViewChild('submit') submit!: ElementRef;
   subscriptions: Subscription[] = [];
@@ -64,7 +65,7 @@ export class GetItemComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private builder: FormBuilder, private http: HttpClient) {
     this.form = this.builder.group({
       id: [{value: '', disabled: true}],
-      categoryId: [{value: '', disabled: true}],
+      categoryId: [{value: '', disabled: false}],
       name: [{value: '', disabled: false}, [Validators.compose([Validators.required, ValidationService.validateNameAlphaNumeric])]],
       amount: [{value: '', disabled: true}],
       price: [{value: '', disabled: true}],
@@ -89,14 +90,16 @@ export class GetItemComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async getItem() {
+    const itemCategoryId = Number(this.form.get('categoryId')?.value);
     const itemName = this.form.get('name')?.value;
 
     try {
-      this.response = `Searching for an item with name ${itemName}...`;
+      this.response = `Searching for an item with category ${CategoryArray[itemCategoryId]} name ${itemName}...`;
+      this.categoryId.nativeElement.disabled = true;
       this.name.nativeElement.disabled = true;
       this.submit.nativeElement.disabled = true;
 
-      const url = `${environment.baseUrl}/items/row/${itemName}`;
+      const url = `${environment.baseUrl}/row/${itemCategoryId}/${itemName}`;
       const response = <ItemReq>await this.http
         .get<ItemReq>(url, {headers: AppHttpHeaders})
         .toPromise();
@@ -111,6 +114,7 @@ export class GetItemComponent implements OnInit, OnDestroy, AfterViewInit {
 
       console.error(e);
     } finally {
+      this.categoryId.nativeElement.disabled = false;
       this.name.nativeElement.disabled = false;
       this.submit.nativeElement.disabled = false;
       this.name.nativeElement.focus();

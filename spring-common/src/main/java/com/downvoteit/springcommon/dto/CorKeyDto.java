@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemResDto {
+public class CorKeyDto {
   private Integer id;
-  private String message;
+  private volatile boolean acked;
+  private volatile boolean published;
 }

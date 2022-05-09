@@ -1,5 +1,6 @@
 package com.downvoteit.springsolaceconsumerone.service;
 
+import com.downvoteit.springcommon.dto.ItemFilterDto;
 import com.downvoteit.springgpb.CategoryProto;
 import com.downvoteit.springgpb.ItemReqProto;
 import com.downvoteit.springsolaceconsumerone.repository.ItemRepository;
@@ -45,31 +46,31 @@ class ItemServiceTest {
 
   @Test
   void getItem_mustAssertVerifyCacheHit_PositiveTest() {
-    String name = "test";
+    var dto = ItemFilterDto.builder().categoryId(1).name("test").build();
 
     var item =
         ItemReqProto.newBuilder()
             .setId(1)
-            .setCategoryId(CategoryProto.PRIMARY)
-            .setName(name)
+            .setCategoryId(CategoryProto.forNumber(dto.getCategoryId()))
+            .setName(dto.getName())
             .setAmount(1)
             .setPrice(1D)
             .build();
 
-    given(mockItemRepository.getItem(name)).willReturn(item);
+    given(mockItemRepository.getItem(dto)).willReturn(item);
 
-    var itemCacheMiss = itemService.getItem(name);
-    var itemCacheHit = itemService.getItem(name);
+    var itemCacheMiss = itemService.getItem(dto);
+    var itemCacheHit = itemService.getItem(dto);
 
     assertThat(itemCacheMiss).isEqualTo(item);
     assertThat(itemCacheHit).isEqualTo(item);
 
-    verify(mockItemRepository, times(1)).getItem(name);
-    assertThat(getItemCache(name)).isEqualTo(item);
+    verify(mockItemRepository, times(1)).getItem(dto);
+    assertThat(getItemCache(dto)).isEqualTo(item);
   }
 
-  private ItemReqProto getItemCache(String name) {
-    Cache.ValueWrapper wrapper = cache.get(name);
+  private ItemReqProto getItemCache(ItemFilterDto dto) {
+    Cache.ValueWrapper wrapper = cache.get(dto);
 
     if (wrapper == null) return null;
 

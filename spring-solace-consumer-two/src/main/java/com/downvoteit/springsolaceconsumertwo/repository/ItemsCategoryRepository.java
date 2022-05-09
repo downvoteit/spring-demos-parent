@@ -9,36 +9,36 @@ import javax.persistence.EntityManagerFactory;
 
 @Slf4j
 @Repository
-public class ItemCategoryRepository {
+public class ItemsCategoryRepository {
   private final EntityManagerFactory factory;
 
-  public ItemCategoryRepository(EntityManagerFactory factory) {
+  public ItemsCategoryRepository(EntityManagerFactory factory) {
     this.factory = factory;
   }
 
-  public void updateCategory(ItemReqProto data, boolean rollback) {
+  public void updateCategory(ItemReqProto proto, boolean rollback) {
     var manager = factory.createEntityManager();
     var transaction = manager.getTransaction();
 
     try {
       transaction.begin();
 
-      var itemByCategory = manager.getReference(ItemsCategory.class, data.getCategoryId().getNumber());
+      var row = manager.getReference(ItemsCategory.class, proto.getCategoryId().getNumber());
 
       var newAmount = 0;
       var newPrice = 0D;
       if (rollback) {
-        newAmount = itemByCategory.getAmount() - data.getAmount();
-        newPrice = itemByCategory.getPrice() - data.getPrice();
+        newAmount = row.getAmount() - proto.getAmount();
+        newPrice = row.getPrice() - proto.getPrice();
       } else {
-        newAmount = itemByCategory.getAmount() + data.getAmount();
-        newPrice = itemByCategory.getPrice() + data.getPrice();
+        newAmount = row.getAmount() + proto.getAmount();
+        newPrice = row.getPrice() + proto.getPrice();
       }
 
-      itemByCategory.setAmount(newAmount);
-      itemByCategory.setPrice(newPrice);
+      row.setAmount(newAmount);
+      row.setPrice(newPrice);
 
-      manager.merge(itemByCategory);
+      manager.merge(row);
     } finally {
       transaction.commit();
       manager.close();

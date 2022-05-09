@@ -1,5 +1,6 @@
 package com.downvoteit.springsolaceconsumerone.repository;
 
+import com.downvoteit.springcommon.dto.ItemFilterDto;
 import com.downvoteit.springgpb.CategoryProto;
 import com.downvoteit.springgpb.ItemReqProto;
 import com.downvoteit.springgpb.ItemReqsProto;
@@ -10,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -22,7 +23,7 @@ public class ItemRepository {
     this.factory = factory;
   }
 
-  public void saveItem(ItemReqProto data) throws CheckedPersistenceException {
+  public void saveItem(ItemReqProto proto) throws CheckedPersistenceException {
     try {
       var manager = factory.createEntityManager();
       var transaction = manager.getTransaction();
@@ -30,17 +31,17 @@ public class ItemRepository {
       try {
         transaction.begin();
 
-        var category = manager.find(Category.class, data.getCategoryId().getNumber());
+        var ref = manager.find(Category.class, proto.getCategoryId().getNumber());
 
-        var item =
+        var row =
             Item.builder()
-                .category(category)
-                .name(data.getName())
-                .amount(data.getAmount())
-                .price(data.getPrice())
+                .category(ref)
+                .name(proto.getName())
+                .amount(proto.getAmount())
+                .price(proto.getPrice())
                 .build();
 
-        manager.persist(item);
+        manager.persist(row);
       } finally {
         transaction.commit();
         manager.close();
@@ -50,25 +51,28 @@ public class ItemRepository {
     }
   }
 
-  public ItemReqProto getItem(String name) {
+  public ItemReqProto getItem(ItemFilterDto dto) {
     var manager = factory.createEntityManager();
     var transaction = manager.getTransaction();
 
     try {
       transaction.begin();
 
-      var data =
+      var row =
           manager
-              .createQuery("select t from items t where t.name = :name", Item.class)
-              .setParameter("name", name)
+              .createQuery(
+                  "select t from items t where t.category.id = :categoryId and t.name = :name",
+                  Item.class)
+              .setParameter("categoryId", dto.getCategoryId())
+              .setParameter("name", dto.getName())
               .getSingleResult();
 
       return ItemReqProto.newBuilder()
-          .setId(data.getId())
-          .setCategoryId(CategoryProto.forNumber(data.getCategory().getId()))
-          .setName(data.getName())
-          .setAmount(data.getAmount())
-          .setPrice(data.getPrice())
+          .setId(row.getId())
+          .setCategoryId(CategoryProto.forNumber(row.getCategory().getId()))
+          .setName(row.getName())
+          .setAmount(row.getAmount())
+          .setPrice(row.getPrice())
           .build();
     } finally {
       transaction.rollback();
@@ -83,33 +87,66 @@ public class ItemRepository {
     try {
       transaction.begin();
 
-      List<Item> list =
+      List<Item> pagedList =
           manager
-              .createQuery("select t from items t order by t.name", Item.class)
+              .createQuery("select t from items t order by t.id", Item.class)
               .setFirstResult(page)
               .setMaxResults(limit)
               .getResultList();
 
-      if (list.isEmpty()) throw new PersistenceException("No data found");
+      if (pagedList.isEmpty()) pagedList = new ArrayList<>();
 
-      var proto = ItemReqsProto.newBuilder();
+      var protoList = ItemReqsProto.newBuilder();
 
-      for (var item : list) {
-        var temp =
+      for (var row : pagedList) {
+        var protoRow =
             ItemReqProto.newBuilder()
-                .setId(item.getId())
-                .setCategoryId(CategoryProto.forNumber(item.getCategory().getId()))
-                .setName(item.getName())
-                .setAmount(item.getAmount())
-                .setPrice(item.getPrice())
+                .setId(row.getId())
+                .setCategoryId(CategoryProto.forNumber(row.getCategory().getId()))
+                .setName(row.getName())
+                .setAmount(row.getAmount())
+                .setPrice(row.getPrice())
                 .build();
 
-        proto.addItems(temp);
+        protoList.addItems(protoRow);
       }
 
-      return proto.build();
+      manager.flush();
+      manager.clear();
+
+      return protoList.build();
     } finally {
       transaction.rollback();
+      manager.close();
+    }
+  }
+
+  public ItemReqProto deleteItem(Integer id) {
+    var manager = factory.createEntityManager();
+    var transaction = manager.getTransaction();
+
+    try {
+      transaction.begin();
+
+      var row = manager.find(Item.class, id);
+
+      manager
+          .createQuery("delete from items t where t.id = :id")
+          .setParameter("id", id)
+          .executeUpdate();
+
+      manager.flush();
+      manager.clear();
+
+      return ItemReqProto.newBuilder()
+          .setId(row.getId())
+          .setCategoryId(CategoryProto.forNumber(row.getCategory().getId()))
+          .setName(row.getName())
+          .setAmount(row.getAmount())
+          .setPrice(row.getPrice())
+          .build();
+    } finally {
+      transaction.commit();
       manager.close();
     }
   }

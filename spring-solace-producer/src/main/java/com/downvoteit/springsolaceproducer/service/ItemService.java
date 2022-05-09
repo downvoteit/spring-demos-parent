@@ -1,8 +1,9 @@
 package com.downvoteit.springsolaceproducer.service;
 
+import com.downvoteit.springcommon.dto.ItemFilterDto;
 import com.downvoteit.springcommon.dto.ItemReqDto;
 import com.downvoteit.springcommon.dto.ItemReqsDto;
-import com.downvoteit.springcommon.dto.ItemResDto;
+import com.downvoteit.springcommon.dto.ResDto;
 import com.solacesystems.jcsmp.JCSMPException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,25 +11,32 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class ItemService {
-  private final ProducerService producerService;
-  private final ReplyService replyService;
+  private final PersistentPubSubService persistentPubSubService;
+  private final DirectRequestReplyService directRequestReplyService;
+  private final SemiPersistentRequestReplyService semiPersistentRequestReplyService;
 
-  public ItemService(ProducerService producerService, ReplyService replyService) {
-    this.producerService = producerService;
-    this.replyService = replyService;
+  public ItemService(
+      PersistentPubSubService persistentPubSubService,
+      DirectRequestReplyService directRequestReplyService,
+      SemiPersistentRequestReplyService semiPersistentRequestReplyService) {
+    this.persistentPubSubService = persistentPubSubService;
+    this.directRequestReplyService = directRequestReplyService;
+    this.semiPersistentRequestReplyService = semiPersistentRequestReplyService;
   }
 
-  public ItemResDto createItem(ItemReqDto dto) throws JCSMPException {
-    var message = String.format("Creation successful, created an item with name %s", dto.getName());
-
-    return ItemResDto.builder().id(producerService.createItem(dto)).message(message).build();
+  public ResDto createItem(ItemReqDto dto) throws JCSMPException {
+    return persistentPubSubService.createItem(dto);
   }
 
-  public ItemReqDto getItem(String name) throws JCSMPException {
-    return replyService.getItem(name);
+  public ItemReqDto getItem(ItemFilterDto dto) throws JCSMPException {
+    return directRequestReplyService.getItem(dto);
   }
 
   public ItemReqsDto getItems(Integer page, Integer limit) throws JCSMPException {
-    return replyService.getItems(page, limit);
+    return directRequestReplyService.getItems(page, limit);
+  }
+
+  public ResDto deleteItem(Integer id) throws JCSMPException {
+    return semiPersistentRequestReplyService.deleteItem(id);
   }
 }

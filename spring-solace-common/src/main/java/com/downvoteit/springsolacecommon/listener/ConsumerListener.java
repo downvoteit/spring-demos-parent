@@ -22,12 +22,10 @@ public class ConsumerListener implements XMLMessageListener {
   }
 
   protected void parseMessage(BytesMessage message) {
-    var bytes = message.getData();
-
     try {
-      var data = ItemReqProto.parseFrom(bytes);
+      var data = ItemReqProto.parseFrom(message.getData());
 
-      log.info("Consumed: \n{}", data);
+      log.debug("Consumed: \n{}", data);
     } catch (InvalidProtocolBufferException e) {
       log.error("", e);
     }

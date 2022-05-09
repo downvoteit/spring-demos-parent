@@ -1,6 +1,7 @@
 spring:
   main:
     banner-mode: off
+    log-startup-info: false
   datasource:
     url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
     username: sa
@@ -36,6 +37,7 @@ server:
   port: 9001
 
 logging:
-  level.org.hibernate.SQL: INFO
-  level.org.hibernate.SQL_SLOW: TRACE
-  level.org.hibernate.type.descriptor.sql.BasicBinder: INFO
+  level:
+    org.hibernate.SQL: INFO
+    org.hibernate.SQL_SLOW: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO

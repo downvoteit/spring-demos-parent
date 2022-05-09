@@ -1,7 +1,9 @@
 spring:
   main:
     banner-mode: off
+    log-startup-info: false
   datasource:
+    name: consumer_two_pg
     url: jdbc:postgresql://localhost:8004/postgres
     username: postgres
     password: postgres
@@ -9,7 +11,7 @@ spring:
     hikari:
       connection-test-query: select 1
       auto-commit: false
-      maximum-pool-size: 3
+      maximum-pool-size: 6
   jpa:
     show-sql: false
     generate-ddl: true
@@ -24,11 +26,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        jdbc.batch_size: 1000
-        order_updates: true
-        batch_versioned_data: true
-        session:
-          events.log.LOG_QUERIES_SLOWER_THAN_MS: 10
   flyway:
     enabled: true
     locations: classpath:db/versions
@@ -52,6 +49,7 @@ solace:
 
 logging:
   level:
-    root: INFO
+    root: ERROR
     com.solacesystems.jcsmp.*: ERROR
     org.hibernate.*: ERROR
+    com.downvoteit.*: INFO

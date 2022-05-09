@@ -1,4 +1,4 @@
-package com.downvoteit.springsolaceproducer.handler;
+package com.downvoteit.springsolacecommon.handler;
 
 import com.downvoteit.springsolacecommon.util.SessionUtil;
 import com.solacesystems.jcsmp.JCSMPException;

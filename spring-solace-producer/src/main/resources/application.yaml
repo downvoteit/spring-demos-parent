@@ -1,6 +1,7 @@
 spring:
   main:
     banner-mode: off
+    log-startup-info: false
 
 server:
   port: 7004
@@ -17,5 +18,6 @@ solace:
 
 logging:
   level:
-    root: INFO
+    root: ERROR
     com.solacesystems.jcsmp.*: ERROR
+    com.downvoteit.*: INFO

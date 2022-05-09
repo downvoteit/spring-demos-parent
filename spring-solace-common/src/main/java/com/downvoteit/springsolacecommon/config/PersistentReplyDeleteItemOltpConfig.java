@@ -1,5 +1,6 @@
 package com.downvoteit.springsolacecommon.config;
 
+import com.downvoteit.springsolacecommon.properties.AppProperties;
 import com.solacesystems.jcsmp.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,28 +9,28 @@ import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 @Configuration
-public class GetItemsConfig {
-  @Bean(SharedProps.GetItemsOltp.QUEUE)
+public class PersistentReplyDeleteItemOltpConfig {
+  @Bean(AppProperties.DeleteItemOltp.QUEUE)
   public Queue createQueue(JCSMPSession session, EndpointProperties properties)
       throws JCSMPException {
-    var queue = JCSMPFactory.onlyInstance().createQueue(SharedProps.GetItemsOltp.QUEUE);
+    var queue = JCSMPFactory.onlyInstance().createQueue(AppProperties.DeleteItemOltp.QUEUE);
 
     session.provision(queue, properties, JCSMPSession.FLAG_IGNORE_ALREADY_EXISTS);
 
     return queue;
   }
 
-  @Bean(SharedProps.GetItemsOltp.FLOW_PROPS)
+  @Bean(AppProperties.DeleteItemOltp.FLOW_PROPS)
   public ConsumerFlowProperties createFlowProps(
-      @Qualifier(SharedProps.GetItemsOltp.QUEUE) Queue queue) {
+      @Qualifier(AppProperties.DeleteItemOltp.QUEUE) Queue queue) {
     return CommonConfig.createFlowProps(queue);
   }
 
-  @Bean(SharedProps.GetItemsOltp.TOPIC)
+  @Bean(AppProperties.DeleteItemOltp.TOPIC)
   public Topic createTopic(
-      JCSMPSession session, @Qualifier(SharedProps.GetItemsOltp.QUEUE) Queue queue)
+      JCSMPSession session, @Qualifier(AppProperties.DeleteItemOltp.QUEUE) Queue queue)
       throws JCSMPException {
-    var topic = JCSMPFactory.onlyInstance().createTopic(SharedProps.GetItemsOltp.TOPIC);
+    var topic = JCSMPFactory.onlyInstance().createTopic(AppProperties.DeleteItemOltp.TOPIC);
 
     session.addSubscription(queue, topic, JCSMPSession.WAIT_FOR_CONFIRM);
 

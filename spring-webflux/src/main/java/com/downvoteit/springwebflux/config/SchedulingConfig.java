@@ -1,8 +1,8 @@
 package com.downvoteit.springwebflux.config;
 
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableCaching
 @Configuration
-public class CacheConfig {}
+@EnableScheduling
+public class SchedulingConfig {}

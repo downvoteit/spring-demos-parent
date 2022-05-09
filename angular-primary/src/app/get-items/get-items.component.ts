@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Subscription} from "rxjs";
-import {AppHttpHeaders, CategoryArray, CategoryEnum, ItemReq, ItemReqsPage, PageLimits} from "../app.types";
+import {AppHttpHeaders, CategoryArray, ItemReq, ItemReqsPage, PageLimits, ResDto} from "../app.types";
 import {environment} from "../../environments/environment";
 
 @Component({
@@ -24,15 +24,15 @@ import {environment} from "../../environments/environment";
           </tr>
           </thead>
           <tbody>
-          <ng-container *ngIf="loaded; else noData">
-            <tr *ngFor="let item of response; let i = index">
+          <ng-container *ngIf="responseGet.length > 0; else noData">
+            <tr *ngFor="let item of responseGet; let i = index">
               <td class="plain-tbl-center">{{ (i + 1) + request.page }}</td>
               <td>{{ mapCategoryIdToEnum(item) }}</td>
               <td>{{ item.name }}</td>
               <td class="plain-tbl-right">{{ item.amount }}</td>
               <td class="plain-tbl-right">{{ item.price }}</td>
               <td class="plain-tbl-center">
-                <button (click)="deleteItem()">Delete row</button>
+                <button (click)="deleteItem(item.id)">Delete row</button>
               </td>
             </tr>
           </ng-container>
@@ -58,8 +58,7 @@ import {environment} from "../../environments/environment";
           <button (click)="previousPage()">Previous page</button>
           <button (click)="nextPage()">Next page</button>
         </div>
-        <div>
-        </div>
+        <div *ngIf="responseDelete" id="response">{{ responseDelete.message }}</div>
       </div>
     </div>
   `,
@@ -69,8 +68,8 @@ export class GetItemsComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   limits = PageLimits;
   request: ItemReqsPage = {page: 0, limit: 10};
-  response: ItemReq[] = [];
-  loaded = false;
+  responseGet: ItemReq[] = [];
+  responseDelete: ResDto | undefined;
 
   constructor(private http: HttpClient) {
   }
@@ -85,22 +84,30 @@ export class GetItemsComponent implements OnInit, OnDestroy {
 
   async getItems() {
     try {
-      const url = `${environment.baseUrl}/items/paged?page=${this.request.page}&limit=${this.request.limit}`;
-      const response = <ItemReq[]>await this.http
+      const url = `${environment.baseUrl}/paged?page=${this.request.page}&limit=${this.request.limit}`;
+      this.responseGet = <ItemReq[]>await this.http
         .get<ItemReq[]>(url, {headers: AppHttpHeaders})
         .toPromise();
-
-      this.response = response;
-      if (response.length > 0) {
-        this.loaded = true;
-      }
     } catch (e) {
+      this.responseGet = [];
+
       console.error(e);
     }
   }
 
-  deleteItem() {
-    console.log('unimplemented');
+  async deleteItem(id: number) {
+    try {
+      const url = `${environment.baseUrl}/${id}`;
+      const response = <ResDto>await this.http
+        .delete<ResDto>(url, {headers: AppHttpHeaders})
+        .toPromise();
+
+      await this.getItems().then();
+
+      this.responseDelete = response;
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   setLimit(limit: string) {

@@ -20,13 +20,9 @@ message ItemReqProto {
   double price = 5;
 }
 
-message ItemResProto {
-  int32 id = 1;
-  string message = 2;
-}
-
 message ItemReqNameProto {
-  string name = 1;
+  int32 categoryId = 1;
+  string name = 2;
 }
 
 message ItemReqsProto {
@@ -36,4 +32,13 @@ message ItemReqsProto {
 message ItemReqsPageProto {
   int32 page = 1;
   int32 limit = 2;
+}
+
+message ReqProto {
+  int32 id = 1;
+}
+
+message ResProto {
+  int32 id = 1;
+  string message = 2;
 }

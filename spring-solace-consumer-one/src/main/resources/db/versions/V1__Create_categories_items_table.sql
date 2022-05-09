@@ -14,7 +14,7 @@ create table items
     name        varchar(255),
     amount      integer default 0,
     price       double precision,
-    unique (name),
+    unique (category_id, name),
     constraint items_fkey
         foreign key (category_id)
             references categories (id)

@@ -1,11 +1,13 @@
 spring:
   main:
     banner-mode: off
+    log-startup-info: false
 
 server:
   port: 7003
 
 logging:
   level:
-    root: INFO
-    org.springframework.cache: TRACE
+    root: ERROR
+    org.springframework.cache: ERROR
+    com.downvoteit.*: INFO

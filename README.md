@@ -81,7 +81,7 @@ mvn clean install
 #### Solace
 
 - Server 55555 HAProxy
-- Server 212 Solace Primary
+- Server 212 Solace Primary + SolAdmin (7011)
 - Server 312 Solace Backup
 - Server 412 Solace Monitoring
 
@@ -108,17 +108,17 @@ mvn clean install
                                      Server 55555
                                        HAProxy
                                           |
-                       -----------------------------------------
-                       |                  |                    |
-                   Server 212         Server 312           Server 412
-                 Solace Primary      Solace Backup      Solace Monitoring
+                   -------------------------------------------------
+                   |                      |                        |
+               Server 212             Server 312               Server 412
+             Solace Primary          Solace Backup          Solace Monitoring
+                SolAdmin                                    
 
-
-     Server 7008/9          Server 9001
-      SonarQube               WebFlux  
-          |                      |     
-     Server 7010            Server 9002
-      PostgreSQL             PostgreSQL
+    Server 7008/9      Server 9001
+     SonarQube           WebFlux  
+         |                  |     
+    Server 7010        Server 9002
+     PostgreSQL         PostgreSQL
 ```
 
 ## Feature schema
@@ -127,7 +127,7 @@ mvn clean install
 
 - Create an item on Server 7005 and add stats on Server 8003
 - On duplicate error on Server 7005 send a compensatory operation to Server 8003
-- Features: Sync/blocking (JCSMP), Eventual consistency, Durable, Exclusive, Byte transfer (Google Protobuf)
+- Features: Sync/blocking (JCSMP), Persistent (Durable), Exclusive, Byte transfer (Google Protobuf), Eventually consistent
 
 ```
                     ---- create item ----> Server 7005 --- duplicate error ----
@@ -143,7 +143,7 @@ mvn clean install
 
 - Send a name to Server 7005
 - Receive an item from Server 7004
-- Features: Sync/blocking (JCSMP), Non-durable (Direct), Exclusive, Byte transfer (Google Protobuf)
+- Features: Sync/blocking (JCSMP), Direct (Non-durable), Exclusive, Byte transfer (Google Protobuf)
 
 ```
                     ------- send name ------> (request)
@@ -170,7 +170,7 @@ mvn clean install
 
 - Send a page & limit to Server 7005
 - Receive an item from Server 7004
-- Features: Sync/blocking (JCSMP), Non-durable (Direct), Exclusive, Byte transfer (Google Protobuf)
+- Features: Sync/blocking (JCSMP), Direct (Non-durable), Exclusive, Byte transfer (Google Protobuf)
 
 ```
                     ------- send page & limit ------> (request)
@@ -183,271 +183,6 @@ mvn clean install
 - Not cached at either Server 7003 (Caffeine) or Server 7004 (Redis)
 
 ![get items ui](documents/get_items_ui.png)
-
-## Google protobuf schema for Solace event messaging
-
-```protobuf
-syntax = "proto3";
-
-package com.downvoteit.springgpb;
-
-option java_multiple_files = true;
-option java_package = "com.downvoteit.springgpb";
-
-enum CategoryProto {
-  UNDEFINED = 0;
-  PRIMARY = 1;
-  SECONDARY = 2;
-  TERTIARY = 3;
-}
-
-message ItemReqProto {
-  int32 id = 1;
-  CategoryProto categoryId = 2;
-  string name = 3;
-  int32 amount = 4;
-  double price = 5;
-}
-
-message ItemResProto {
-  int32 id = 1;
-  string message = 2;
-}
-
-message ItemReqNameProto {
-  string name = 1;
-}
-
-message ItemReqsProto {
-  repeated ItemReqProto items = 1;
-}
-
-message ItemReqsPageProto {
-  int32 page = 1;
-  int32 limit = 2;
-}
-```
-
-## Hibernate entities for persistence
-
-### Primary
-
-```java
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity(name = "categories")
-@Table(name = "categories")
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Category {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categories_id_seq")
-  @GenericGenerator(
-      name = "categories_id_seq",
-      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator")
-  private Integer id;
-
-  @Column(name = "name")
-  private String name;
-}
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity(name = "items")
-@Table(name = "items")
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Item {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "items_id_seq")
-  @GenericGenerator(
-      name = "items_id_seq",
-      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator")
-  private Integer id;
-
-  @OneToOne
-  private Category category;
-
-  @Column(name = "name")
-  private String name;
-
-  @Column(name = "amount")
-  private Integer amount;
-
-  @Column(name = "price")
-  private Double price;
-}
-
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Entity(name = "store_items")
-public class StoreItem extends Item {
-  @Column(name = "store_name")
-  private String storeName;
-}
-
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Entity(name = "warehouse_items")
-public class WarehouseItem extends Item {
-  @Column(name = "warehouse_name")
-  private String warehouseName;
-}
-```
-
-#### Secondary
-
-```java
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity(name = "items_categories")
-@Table(name = "items_categories")
-@Inheritance(strategy = InheritanceType.JOINED)
-public class ItemsCategory {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "items_categories_id_seq")
-  @GenericGenerator(
-      name = "items_categories_id_seq",
-      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator")
-  private Integer id;
-
-  @Column(name = "name")
-  private String name;
-
-  @Column(name = "amount")
-  private Integer amount;
-
-  @Column(name = "price")
-  private Double price;
-}
-```
-
-## DTO POJOs for Machine-to-Machine WebClient HTTP communication
-
-```java
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class ItemCorKeyDto {
-  private Integer id;
-  private volatile boolean acked;
-  private volatile boolean published;
-}
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class ItemReqDto {
-  private Integer id;
-  private Integer categoryId;
-  private String name;
-  private Integer amount;
-  private Double price;
-}
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class ItemResDto {
-  private Integer id;
-  private String message;
-}
-```
-
-## Flyway versioned schema for centralized SQL management
-
-```postgresql
--- V1__Create_categories_items_table.sql
-create table categories
-(
-    id   serial not null
-        constraint categories_pkey primary key,
-    name varchar(255),
-    unique (name)
-);
-
-create table items
-(
-    id          serial not null
-        constraint items_pkey primary key,
-    category_id int,
-    name        varchar(255),
-    amount      integer default 0,
-    price       double precision,
-    unique (name),
-    constraint items_fkey
-        foreign key (category_id)
-            references categories (id)
-);
-
-alter table categories
-    owner to postgres;
-alter table items
-    owner to postgres;
-
--- V2__Insert_categories_table.sql
-insert into categories (id, name)
-values (1, 'Primary'),
-       (2, 'Secondary'),
-       (3, 'Tertiary');
-
-alter sequence categories_id_seq restart with 4;
-
--- V3__Insert_items_table.sql
-insert into items (id, category_id, name, amount, price)
-values (nextval('items_id_seq'), 1, 'Test primary', 1, 10.0),
-       (nextval('items_id_seq'), 2, 'Test secondary', 2, 20.0),
-       (nextval('items_id_seq'), 3, 'Test tertiary', 3, 30.0);
-
--- V4__Create_store_items_table.sql
-create table store_items
-(
-    id          serial not null
-        constraint store_items_pkey primary key,
-    category_id int,
-    name        varchar(255),
-    store_name  varchar(255),
-    amount      integer default 0,
-    price       double precision,
-    unique (name),
-    constraint store_items_fkey
-        foreign key (category_id)
-            references categories (id)
-);
-
-create table warehouse_items
-(
-    id             serial not null
-        constraint warehouse_items_pkey primary key,
-    category_id    int,
-    name           varchar(255),
-    warehouse_name varchar(255),
-    amount         integer default 0,
-    price          double precision,
-    unique (name),
-    constraint warehouse_items_fkey
-        foreign key (category_id)
-            references categories (id)
-);
-
-alter table store_items
-    owner to postgres;
-alter table warehouse_items
-    owner to postgres;
-```
 
 ## Notes
 
@@ -462,6 +197,8 @@ alter table warehouse_items
 - Topic subscriptions allow for complex filtering at the level of the broker
 - An exclusive queue allows receiving messages in Active-Standby/backup fashion
 - A non-exclusive queue allows receiving message in round-robin/competing fashion
+- Flow receivers are for persistent endpoints
+- Cache sessions are for direct endpoints
 
 ### WebFlux
 
