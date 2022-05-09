@@ -23,7 +23,7 @@ describe('AppComponent', () => {
   it(`should have as title 'angular-primary'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.message).toEqual('Welcome to Server');
+    expect(app.message).toContain('Welcome to Server');
   });
 
   it('should render title', () => {

@@ -5,7 +5,7 @@ import {GetItemComponent} from "./get-item/get-item.component";
 import {GetItemsComponent} from "./get-items/get-items.component";
 
 const routes: Routes = [
-  {path: '', component: CreateItemComponent},
+  {path: '', component: GetItemsComponent},
   {path: 'add', component: CreateItemComponent},
   {path: 'find', component: GetItemComponent},
   {path: 'browse', component: GetItemsComponent},
