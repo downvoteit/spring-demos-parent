@@ -150,7 +150,9 @@ mvn clean install
 
 ### Update item
 
-- TODO
+- TODO description & schemas
+
+![edit item ui](documents/edit_item_ui.png)
 
 ### Get item
 
@@ -199,13 +201,13 @@ mvn clean install
 
 ### Delete item
 
-- TODO
+- TODO description & schemas
 
 ![get items ui](documents/get_items_ui.png)
 
 ### Get items category
 
-- TODO
+- TODO description & schemas
 
 ![get items_category ui](documents/get_items_category_ui.png)
 
