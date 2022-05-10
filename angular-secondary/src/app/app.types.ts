@@ -6,6 +6,11 @@ export const AppHttpHeaders = new HttpHeaders()
 
 export const PageLimits = [5, 10, 50, 100];
 
+export interface PagedReq {
+  page: number;
+  limit: number;
+}
+
 export interface ItemsCategoryReq {
   id: number;
   name: string;

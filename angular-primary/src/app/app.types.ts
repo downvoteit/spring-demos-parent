@@ -15,17 +15,17 @@ export const ItemRequestDefault = {id: 0, categoryId: 1, name: '', amount: 0, pr
 export const ItemResponseDefault = {id: 0, message: ''};
 export const PageLimits = [5, 10, 50, 100];
 
+export interface PagedReq {
+  page: number;
+  limit: number;
+}
+
 export interface ItemReq {
   id: number;
   categoryId: number;
   name: string;
   amount: number;
   price: number;
-}
-
-export interface ItemReqsPage {
-  page: number;
-  limit: number;
 }
 
 export interface ResDto {

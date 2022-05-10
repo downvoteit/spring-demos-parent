@@ -2,8 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {AppHttpHeaders, ItemsCategoryReq, PageLimits} from "../app.types";
-import {ItemReqsPage} from "../../../../angular-primary/src/app/app.types";
+import {AppHttpHeaders, ItemsCategoryReq, PagedReq, PageLimits} from "../app.types";
 
 @Component({
   selector: 'app-get-items-category',
@@ -59,7 +58,7 @@ import {ItemReqsPage} from "../../../../angular-primary/src/app/app.types";
 export class GetItemsCategoryComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   limits = PageLimits;
-  request: ItemReqsPage = {page: 0, limit: 10};
+  request: PagedReq = {page: 0, limit: 10};
   responseGet: ItemsCategoryReq[] = [];
 
   constructor(private http: HttpClient) {

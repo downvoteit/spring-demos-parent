@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Subscription} from "rxjs";
-import {AppHttpHeaders, CategoryArray, ItemReq, ItemReqsPage, PageLimits, ResDto} from "../app.types";
+import {AppHttpHeaders, CategoryArray, ItemReq, PagedReq, PageLimits, ResDto} from "../app.types";
 import {environment} from "../../environments/environment";
 
 @Component({
@@ -67,7 +67,7 @@ import {environment} from "../../environments/environment";
 export class GetItemsComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   limits = PageLimits;
-  request: ItemReqsPage = {page: 0, limit: 10};
+  request: PagedReq = {page: 0, limit: 10};
   responseGet: ItemReq[] = [];
   responseDelete: ResDto | undefined;
 

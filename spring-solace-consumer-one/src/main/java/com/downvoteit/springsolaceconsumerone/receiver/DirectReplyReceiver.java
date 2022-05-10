@@ -2,7 +2,7 @@ package com.downvoteit.springsolaceconsumerone.receiver;
 
 import com.downvoteit.springcommon.dto.ItemFilterDto;
 import com.downvoteit.springproto.ItemReqNameProto;
-import com.downvoteit.springproto.ItemReqsPageProto;
+import com.downvoteit.springproto.PagedReqProto;
 import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.downvoteit.springsolacecommon.listener.ConsumerListener;
 import com.downvoteit.springsolaceconsumerone.service.ItemService;
@@ -70,7 +70,7 @@ public class DirectReplyReceiver {
 
                     producer.sendReply(msgReq, msgRes);
                   } else {
-                    var protoReq = ItemReqsPageProto.parseFrom(msgReq.getData());
+                    var protoReq = PagedReqProto.parseFrom(msgReq.getData());
                     var protoRes = itemService.getItems(protoReq.getPage(), protoReq.getLimit());
 
                     var msgRes = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);

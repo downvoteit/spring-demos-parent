@@ -5,8 +5,8 @@ import com.downvoteit.springcommon.dto.ItemReqDto;
 import com.downvoteit.springcommon.dto.ItemReqsDto;
 import com.downvoteit.springproto.ItemReqNameProto;
 import com.downvoteit.springproto.ItemReqProto;
-import com.downvoteit.springproto.ItemReqsPageProto;
 import com.downvoteit.springproto.ItemReqsProto;
+import com.downvoteit.springproto.PagedReqProto;
 import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.solacesystems.jcsmp.*;
@@ -72,7 +72,7 @@ public class DirectRequestReplyService {
     var msgReq = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
     msgReq.setDeliveryMode(DeliveryMode.DIRECT);
 
-    var protoReq = ItemReqsPageProto.newBuilder().setPage(page).setLimit(limit).build();
+    var protoReq = PagedReqProto.newBuilder().setPage(page).setLimit(limit).build();
     msgReq.setData(protoReq.toByteArray());
 
     XMLMessageProducer producer = null;
