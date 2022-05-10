@@ -1,8 +1,8 @@
 package com.downvoteit.springsolaceproducer.service;
 
 import com.downvoteit.springcommon.dto.ResDto;
-import com.downvoteit.springgpb.ItemReqProto;
-import com.downvoteit.springgpb.ReqProto;
+import com.downvoteit.springproto.ItemReqProto;
+import com.downvoteit.springproto.ReqProto;
 import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.downvoteit.springsolacecommon.properties.AppProperties;
 import com.google.protobuf.InvalidProtocolBufferException;

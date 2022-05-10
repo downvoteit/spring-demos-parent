@@ -1,6 +1,6 @@
 package com.downvoteit.springsolaceconsumertwo.receiver;
 
-import com.downvoteit.springgpb.ItemReqProto;
+import com.downvoteit.springproto.ItemReqProto;
 import com.downvoteit.springsolacecommon.listener.ConsumerListener;
 import com.downvoteit.springsolacecommon.properties.AppProperties;
 import com.downvoteit.springsolaceconsumertwo.service.ItemsCategoryService;
@@ -18,36 +18,35 @@ import javax.annotation.PreDestroy;
 public class PersistentPubSubReceiver {
   private final JCSMPSession session;
   private final EndpointProperties endpointProperties;
-  private final ConsumerFlowProperties flowPropertiesCommit;
-  private final ConsumerFlowProperties flowPropertiesRollback;
+  private final ConsumerFlowProperties flowProperties;
+  private final ConsumerFlowProperties flowPropertiesUndo;
   private final ItemsCategoryService itemsCategoryService;
-  private FlowReceiver receiverCommit;
-  private FlowReceiver receiverRollback;
+  private FlowReceiver receiver;
+  private FlowReceiver receiverUndo;
 
   public PersistentPubSubReceiver(
       JCSMPSession session,
       EndpointProperties endpointProperties,
-      @Qualifier(AppProperties.CreateItemOlap.FLOW_PROPS)
-          ConsumerFlowProperties flowPropertiesCommit,
+      @Qualifier(AppProperties.CreateItemOlap.FLOW_PROPS) ConsumerFlowProperties flowProperties,
       @Qualifier(AppProperties.CreateItemOlap.FLOW_PROPS_UNDO)
-          ConsumerFlowProperties flowPropertiesRollback,
+          ConsumerFlowProperties flowPropertiesUndo,
       ItemsCategoryService itemsCategoryService) {
     this.session = session;
     this.endpointProperties = endpointProperties;
-    this.flowPropertiesCommit = flowPropertiesCommit;
-    this.flowPropertiesRollback = flowPropertiesRollback;
+    this.flowProperties = flowProperties;
+    this.flowPropertiesUndo = flowPropertiesUndo;
     this.itemsCategoryService = itemsCategoryService;
   }
 
   @PostConstruct
   void start() throws JCSMPException {
-    receiverCommit =
+    receiver =
         session.createFlow(
             new ConsumerListener() {
               @Override
               protected void parseMessage(BytesMessage message) {
                 log.info(
-                    "Consuming createItem (commit), {}, {}",
+                    "Consuming createItem, {}, {}",
                     message.getDeliveryMode(),
                     message.getDestination());
 
@@ -60,16 +59,16 @@ public class PersistentPubSubReceiver {
                 }
               }
             },
-            flowPropertiesCommit,
+            flowProperties,
             endpointProperties);
 
-    receiverRollback =
+    receiverUndo =
         session.createFlow(
             new ConsumerListener() {
               @Override
               protected void parseMessage(BytesMessage message) {
                 log.info(
-                    "Consuming createItem (rollback), {}, {}",
+                    "Consuming createItem (undo), {}, {}",
                     message.getDeliveryMode(),
                     message.getDestination());
 
@@ -82,16 +81,16 @@ public class PersistentPubSubReceiver {
                 }
               }
             },
-            flowPropertiesRollback,
+            flowPropertiesUndo,
             endpointProperties);
 
-    receiverCommit.start();
-    receiverRollback.start();
+    receiver.start();
+    receiverUndo.start();
   }
 
   @PreDestroy
   void close() {
-    if (receiverCommit != null && !receiverCommit.isClosed()) receiverCommit.close();
-    if (receiverRollback != null && !receiverRollback.isClosed()) receiverRollback.close();
+    if (receiver != null && !receiver.isClosed()) receiver.close();
+    if (receiverUndo != null && !receiverUndo.isClosed()) receiverUndo.close();
   }
 }

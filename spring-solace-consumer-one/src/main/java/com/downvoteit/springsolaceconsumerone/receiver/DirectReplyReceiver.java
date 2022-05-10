@@ -1,15 +1,14 @@
 package com.downvoteit.springsolaceconsumerone.receiver;
 
 import com.downvoteit.springcommon.dto.ItemFilterDto;
-import com.downvoteit.springgpb.ItemReqNameProto;
-import com.downvoteit.springgpb.ItemReqsPageProto;
+import com.downvoteit.springproto.ItemReqNameProto;
+import com.downvoteit.springproto.ItemReqsPageProto;
 import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.downvoteit.springsolacecommon.listener.ConsumerListener;
 import com.downvoteit.springsolaceconsumerone.service.ItemService;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.solacesystems.jcsmp.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -21,23 +20,23 @@ import javax.persistence.NoResultException;
 @Component
 @Profile("default")
 public class DirectReplyReceiver {
-  private final @Qualifier("session-backup") JCSMPSession sessionBackup;
+  private final JCSMPSession session;
   private final ItemService itemService;
 
   private XMLMessageProducer producer;
   private XMLMessageConsumer consumer;
 
   public DirectReplyReceiver(JCSMPSession session, ItemService itemService) {
-    this.sessionBackup = session;
+    this.session = session;
     this.itemService = itemService;
   }
 
   @PostConstruct
   void start() throws JCSMPException {
-    producer = sessionBackup.getMessageProducer(new ProducerHandler());
+    producer = session.getMessageProducer(new ProducerHandler());
 
     consumer =
-        sessionBackup.getMessageConsumer(
+        session.getMessageConsumer(
             new ConsumerListener() {
               @Override
               protected void parseMessage(BytesMessage msgReq) {
@@ -87,7 +86,7 @@ public class DirectReplyReceiver {
             });
 
     var topic = JCSMPFactory.onlyInstance().createTopic("items/>");
-    sessionBackup.addSubscription(topic);
+    session.addSubscription(topic);
 
     consumer.start();
   }

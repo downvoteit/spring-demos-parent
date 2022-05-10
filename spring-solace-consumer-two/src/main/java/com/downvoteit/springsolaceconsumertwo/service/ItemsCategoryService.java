@@ -1,6 +1,6 @@
 package com.downvoteit.springsolaceconsumertwo.service;
 
-import com.downvoteit.springgpb.ItemReqProto;
+import com.downvoteit.springproto.ItemReqProto;
 import com.downvoteit.springhibernatecommon.entity.secondary.ItemsCategory;
 import com.downvoteit.springsolaceconsumertwo.repository.ItemsCategoryRepository;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,8 @@ public class ItemsCategoryService {
     this.repository = repository;
   }
 
-  public void updateCategory(ItemReqProto data, boolean rollback) {
-    repository.updateCategory(data, rollback);
+  public void updateCategory(ItemReqProto data, boolean undo) {
+    repository.updateCategory(data, undo);
   }
 
   public List<ItemsCategory> getItemsCategory(Integer page, Integer limit) {

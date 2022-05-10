@@ -1,6 +1,6 @@
 package com.downvoteit.springsolacecommon.listener;
 
-import com.downvoteit.springgpb.ItemReqProto;
+import com.downvoteit.springproto.ItemReqProto;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.solacesystems.jcsmp.BytesMessage;
 import com.solacesystems.jcsmp.BytesXMLMessage;

@@ -1,8 +1,8 @@
 package com.downvoteit.springsolaceconsumerone.service;
 
 import com.downvoteit.springcommon.dto.ItemFilterDto;
-import com.downvoteit.springgpb.CategoryProto;
-import com.downvoteit.springgpb.ItemReqProto;
+import com.downvoteit.springproto.CategoryProto;
+import com.downvoteit.springproto.ItemReqProto;
 import com.downvoteit.springsolaceconsumerone.repository.ItemRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;

@@ -154,7 +154,7 @@ mvn clean install
 
 ### Get item
 
-- Send a name to Server 7005
+- Send category id & name to Server 7005
 - Receive an item from Server 7004
 - Features: Sync/blocking (JCSMP), Direct (Non-durable), Exclusive, Byte transfer (Google Protobuf)
 
@@ -227,10 +227,10 @@ mvn clean install
 
 ### WebFlux
 
-- WebFlux cannot be cached with Redis without stopping the event-loop (blocking & rescheduling)
+- WebFlux cannot be cached with Redis without stopping the event-loop (blocking & rescheduling) and caching the wrapper (Mono/Flux) itself
 - WebFlux can be cached with Caffeine but using a deprecated CacheMono types
 
 ### Hibernate
 
-- Entities involved into batch operations must use `@GeneratedValue(GenerationType.SEQUENCE, generator=...)`
+- Entities involved in batch operations must use `@GeneratedValue(GenerationType.SEQUENCE, generator=...)` generator
 - During a batch operation calling `flush()` and `clear()` on an EntityManager will clear the PersistenceContext to avoid an OOM 

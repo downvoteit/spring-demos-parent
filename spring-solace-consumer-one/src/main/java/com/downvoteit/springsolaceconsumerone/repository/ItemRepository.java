@@ -1,9 +1,9 @@
 package com.downvoteit.springsolaceconsumerone.repository;
 
 import com.downvoteit.springcommon.dto.ItemFilterDto;
-import com.downvoteit.springgpb.CategoryProto;
-import com.downvoteit.springgpb.ItemReqProto;
-import com.downvoteit.springgpb.ItemReqsProto;
+import com.downvoteit.springproto.CategoryProto;
+import com.downvoteit.springproto.ItemReqProto;
+import com.downvoteit.springproto.ItemReqsProto;
 import com.downvoteit.springhibernatecommon.entity.primary.Category;
 import com.downvoteit.springhibernatecommon.entity.primary.Item;
 import com.downvoteit.springsolacecommon.exception.CheckedPersistenceException;

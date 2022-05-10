@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package com.downvoteit.springgpb;
+package com.downvoteit.springproto;
 
 option java_multiple_files = true;
-option java_package = "com.downvoteit.springgpb";
+option java_package = "com.downvoteit.springproto";
 
 enum CategoryProto {
   UNDEFINED = 0;

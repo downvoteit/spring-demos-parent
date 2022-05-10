@@ -1,6 +1,6 @@
 package com.downvoteit.springsolaceconsumertwo.repository;
 
-import com.downvoteit.springgpb.ItemReqProto;
+import com.downvoteit.springproto.ItemReqProto;
 import com.downvoteit.springhibernatecommon.entity.secondary.ItemsCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -18,7 +18,7 @@ public class ItemsCategoryRepository {
     this.factory = factory;
   }
 
-  public void updateCategory(ItemReqProto proto, boolean rollback) {
+  public void updateCategory(ItemReqProto proto, boolean undo) {
     var manager = factory.createEntityManager();
     var transaction = manager.getTransaction();
 
@@ -29,7 +29,7 @@ public class ItemsCategoryRepository {
 
       var newAmount = 0;
       var newPrice = 0D;
-      if (rollback) {
+      if (undo) {
         newAmount = row.getAmount() - proto.getAmount();
         newPrice = row.getPrice() - proto.getPrice();
       } else {

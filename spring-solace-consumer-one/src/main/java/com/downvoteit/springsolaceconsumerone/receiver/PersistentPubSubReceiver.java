@@ -1,7 +1,7 @@
 package com.downvoteit.springsolaceconsumerone.receiver;
 
 import com.downvoteit.springcommon.dto.CorKeyDto;
-import com.downvoteit.springgpb.ItemReqProto;
+import com.downvoteit.springproto.ItemReqProto;
 import com.downvoteit.springsolacecommon.exception.CheckedPersistenceException;
 import com.downvoteit.springsolacecommon.handler.ProducerHandler;
 import com.downvoteit.springsolacecommon.listener.ConsumerListener;
@@ -24,7 +24,7 @@ public class PersistentPubSubReceiver {
   private final JCSMPSession session;
   private final EndpointProperties endpointProperties;
   private final ConsumerFlowProperties flowProperties;
-  private final Queue queue;
+  private final Queue createItemOltpQueueUndo;
   private final ItemService itemService;
 
   private FlowReceiver receiver;
@@ -34,18 +34,18 @@ public class PersistentPubSubReceiver {
       JCSMPSession session,
       EndpointProperties endpointProperties,
       @Qualifier(AppProperties.CreateItemOltp.FLOW_PROPS) ConsumerFlowProperties flowProperties,
-      @Qualifier(AppProperties.CreateItemOlap.QUEUE_UNDO) Queue queue,
+      @Qualifier(AppProperties.CreateItemOlap.QUEUE_UNDO) Queue createItemOltpQueueUndo,
       ItemService itemService) {
     this.session = session;
     this.endpointProperties = endpointProperties;
     this.flowProperties = flowProperties;
-    this.queue = queue;
+    this.createItemOltpQueueUndo = createItemOltpQueueUndo;
     this.itemService = itemService;
   }
 
   @PostConstruct
   void start() throws JCSMPException {
-    producer = session.getMessageProducer(new ProducerHandler() {});
+    producer = session.getMessageProducer(new ProducerHandler());
 
     receiver =
         session.createFlow(
@@ -87,7 +87,7 @@ public class PersistentPubSubReceiver {
                             }
 
                             try {
-                              producer.send(msgReq, queue);
+                              producer.send(msgReq, createItemOltpQueueUndo);
                             } catch (JCSMPException e2) {
                               log.error("", e2);
                             }

@@ -46,7 +46,7 @@
 
   <modules>
     <module>spring-hibernate</module>
-    <module>spring-gpb</module>
+    <module>spring-proto</module>
     <module>spring-solace-common</module>
     <module>spring-solace-producer</module>
     <module>spring-solace-consumer-one</module>
@@ -153,7 +153,7 @@
 
       <dependency>
         <groupId>com.downvoteit</groupId>
-        <artifactId>spring-gpb</artifactId>
+        <artifactId>spring-proto</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
